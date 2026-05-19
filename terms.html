@@ -57,6 +57,24 @@
             font-size: 0.9rem;
             margin-bottom: 2em;
         }
+        .language-switch {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 1.5em;
+            padding: 12px 14px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            background: #fafafa;
+            font-size: 0.95rem;
+        }
+        .language-switch span {
+            color: #555;
+        }
+        .language-switch a {
+            font-weight: 600;
+        }
         .notice {
             background-color: #fff8e1;
             border-left: 4px solid #f5a623;
@@ -76,16 +94,30 @@
 <h1>Allgemeine Geschäftsbedingungen (AGB) &amp; Nutzungsbedingungen</h1>
 <p class="meta">Stand: 15. Mai 2026 &middot; Gültig für die iOS-App <strong>eypassiai</strong></p>
 
+<nav class="language-switch" aria-label="Sprach- und EULA-Auswahl">
+    <span>Sprache / Language:</span>
+    <a href="#de-agb">Deutsch: AGB</a>
+    <span>&middot;</span>
+    <a href="#en-eula">English: Apple Standard EULA</a>
+</nav>
+
+<section id="de-agb">
+
 <h2>1. Geltungsbereich und Vertragspartner</h2>
 <p>Diese Allgemeinen Geschäftsbedingungen (im Folgenden „AGB“) regeln die Nutzung der iOS-Applikation <strong>eypassiai</strong> (im Folgenden „App“) zwischen Ihnen als Nutzerin oder Nutzer (im Folgenden „Nutzer“) und:</p>
 <p>
     <strong>Pascal Weber</strong> (Einzelunternehmer)<br>
     Babenhäuser Str. 15<br>
     64859 Eppertshausen<br>
-    E-Mail: <a href=”mailto:passiweber@icloud.com”>passiweber@icloud.com</a><br>
+    E-Mail: <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a><br>
     (im Folgenden „Anbieter” oder „wir”)
 </p>
 <p>Mit dem Herunterladen, Installieren und Nutzen der App akzeptieren Sie diese AGB. Abweichende Bedingungen des Nutzers werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.</p>
+
+<h3>1.1 Apple Standard-EULA</h3>
+<p>Die App wird über den Apple App Store bereitgestellt. Für die Lizenzierung der App über den App Store gilt ergänzend die <strong>Apple Standard End User License Agreement (Standard EULA)</strong>. Die App wird lizenziert und nicht verkauft. Die jeweils aktuelle englische Fassung der Apple Standard-EULA ist hier abrufbar:</p>
+<p><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</a></p>
+<p>Soweit diese AGB zusätzliche Regelungen zur Nutzung von eypassiai, zu Abonnements, Support, Datenschutz oder anwendbarem Verbraucherrecht enthalten, gelten diese ergänzend, sofern sie der Apple Standard-EULA nicht widersprechen.</p>
 
 <h2>2. Leistungsbeschreibung</h2>
 <p>Die App eypassiai ist eine Steuer- und Verwaltungssoftware für private Vermieterinnen und Vermieter in Deutschland. Die App bietet insbesondere folgende Funktionen:</p>
@@ -117,6 +149,8 @@
 
 <h3>4.2 Zahlungsabwicklung</h3>
 <p>Sämtliche Zahlungen werden ausschließlich über die In-App-Purchase-Schnittstelle der Apple Inc. abgewickelt. Es gelten ergänzend die Geschäftsbedingungen von Apple. Rechnungen erhalten Sie ausschließlich von Apple.</p>
+
+<p>Der Kauf und die Verwaltung kostenpflichtiger Abonnements erfolgen über Ihr Apple-Konto. Die Zahlung wird nach Bestätigung des Kaufs über Ihr Apple-Konto belastet. Ein Abonnement verlängert sich automatisch, sofern es nicht spätestens 24 Stunden vor Ablauf des aktuellen Abrechnungszeitraums gekündigt wird.</p>
 
 <h3>4.3 Preisänderungen</h3>
 <p>Preisänderungen für laufende Abonnements werden Ihnen rechtzeitig vor Inkrafttreten über Apple mitgeteilt. Bei erheblicher Preiserhöhung können Sie das Abonnement kündigen, ohne dass die Erhöhung wirksam wird.</p>
@@ -198,6 +232,19 @@
     64859 Eppertshausen<br>
     E-Mail: <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a>
 </p>
+</section>
+
+<hr>
+
+<section id="en-eula" lang="en">
+<h2>English: Apple Standard EULA</h2>
+<p>The eypassiai iOS app is distributed through the Apple App Store. For the App Store license, the Apple Standard End User License Agreement applies. Apps made available through the App Store are licensed, not sold.</p>
+<p>Please read the official Apple Standard EULA here:</p>
+<p><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</a></p>
+<p>Subscriptions are purchased and managed through your Apple account. Payment is charged to your Apple account after purchase confirmation. Subscriptions renew automatically unless canceled at least 24 hours before the end of the current billing period.</p>
+<p>Privacy Policy: <a href="https://eypassiai.com/privacy">https://eypassiai.com/privacy</a></p>
+<p>Support: <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a></p>
+</section>
 
 <hr>
 <p class="meta">© 2026 eypassiai &middot; Pascal Weber. Alle Rechte vorbehalten.</p>

@@ -163,7 +163,7 @@
 <p>Sämtliche Nutzerdaten (Konto, Buchungen, Belege, Mieter- und Vertragsdaten, Fahrtkosten, Nebenkostenabrechnungen) werden in der Datenbank- und Storage-Infrastruktur unseres Auftragsverarbeiters <strong>Supabase Inc.</strong> gespeichert. Der Speicherstandort ist <strong>AWS eu-west-1 (Irland, EU)</strong>.</p>
 <p>Eine Übermittlung in ein Drittland außerhalb der EU/des EWR findet ausschließlich in folgendem, eng begrenztem Umfang statt:</p>
 <ul>
-    <li><strong>Anthropic PBC (USA)</strong> &ndash; ausschließlich bei aktiver Nutzung der KI-Funktionen (Belegscan, KI-Agent). Siehe Abschnitt 5.2.</li>
+    <li><strong>Anthropic PBC (USA)</strong> &ndash; ausschließlich nach vorheriger Zustimmung bei aktiver Nutzung der KI-Funktionen (Belegscan, Ordner-Import, KI-Assistent, Dokumenten-Chat). Siehe Abschnitt 5.2.</li>
 </ul>
 <p>Für diese Übermittlung haben wir Standardvertragsklauseln gemäß Art. 46 Abs. 2 lit. c DSGVO mit dem Empfänger abgeschlossen.</p>
 
@@ -181,13 +181,14 @@
 <h3>5.2 Anthropic PBC &ndash; KI-Verarbeitung (Claude API)</h3>
 <table>
     <tr><th>Anbieter</th><td>Anthropic PBC, 548 Market St PMB 90375, San Francisco, CA 94104, USA</td></tr>
-    <tr><th>Funktion</th><td>Verarbeitung von Belegbildern (OCR-Extraktion) und Texteingaben im KI-Agenten mittels Claude Haiku</td></tr>
+    <tr><th>Funktion</th><td>Verarbeitung von Belegbildern und PDF-Seiten (OCR-Extraktion), Texteingaben im KI-Assistenten sowie Dokumenten-Kontext im Dokumenten-Chat mittels Claude Haiku</td></tr>
     <tr><th>Speicherort</th><td>USA (Verarbeitung ist transient, keine dauerhafte Speicherung durch Anthropic)</td></tr>
     <tr><th>Datenübertragung</th><td>verschlüsselt (TLS 1.2+), API-Zugriff</td></tr>
     <tr><th>Rechtsgrundlage</th><td>Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung), Art. 49 Abs. 1 lit. b DSGVO bzw. Standardvertragsklauseln gemäß Art. 46 Abs. 2 lit. c DSGVO</td></tr>
 </table>
-<p><strong>Wichtiger Hinweis zur KI-Verarbeitung:</strong> Wenn Sie die Belegscan-Funktion oder den KI-Agenten verwenden, werden das jeweilige Bild bzw. der eingegebene Text über die Claude-API an Anthropic übermittelt, dort verarbeitet und das Ergebnis an die App zurückgegeben. Anthropic speichert diese Inhalte gemäß den vertraglichen Vereinbarungen für API-Kunden <strong>nicht dauerhaft</strong> und verwendet sie <strong>nicht zum Trainieren</strong> der KI-Modelle. Übertragene Inhalte können von Anthropic für eine begrenzte Zeit (bis zu 30 Tage) zu Missbrauchserkennungszwecken vorgehalten werden, bevor sie automatisch gelöscht werden.</p>
-<p>Sie können die KI-Funktionen jederzeit ungenutzt lassen. Buchungen können vollständig manuell erfasst werden, ohne dass eine Datenübertragung an Anthropic stattfindet.</p>
+<p><strong>Wichtiger Hinweis zur KI-Verarbeitung:</strong> Vor der ersten Nutzung einer KI-Funktion fragt die App ausdrücklich nach Ihrer Zustimmung und erklärt, welche Daten gesendet werden, an wen sie gesendet werden und zu welchem Zweck. Je nach Funktion können Belegbilder, PDF-Seiten, Dokumentnamen, Dokumentdateien bzw. Dokument-URLs, Chatnachrichten, Objekte, Adressen, Mieter, Verträge, Buchungen, Fahrtkosten, Beträge und Kategorien an unsere Supabase Edge Function und anschließend über die Claude-API an Anthropic übermittelt werden. Anthropic verarbeitet diese Inhalte ausschließlich zur Bereitstellung der angeforderten KI-Antwort und gibt das Ergebnis an die App zurück.</p>
+<p>Anthropic speichert diese Inhalte gemäß den vertraglichen Vereinbarungen für API-Kunden <strong>nicht dauerhaft</strong> und verwendet sie <strong>nicht zum Trainieren</strong> der KI-Modelle. Übertragene Inhalte können von Anthropic für eine begrenzte Zeit (bis zu 30 Tage) zu Missbrauchserkennungszwecken vorgehalten werden, bevor sie automatisch gelöscht werden. Wir haben mit den eingesetzten Dienstleistern vertragliche Datenschutz- und Sicherheitsanforderungen vereinbart, die ein angemessenes und vergleichbares Schutzniveau für die übermittelten Daten sicherstellen.</p>
+<p>Sie können die KI-Funktionen jederzeit ungenutzt lassen. Buchungen, Dokumente und weitere Inhalte können vollständig manuell erfasst oder verwaltet werden, ohne dass eine Datenübertragung an Anthropic stattfindet.</p>
 
 <h3>5.3 RevenueCat Inc. &ndash; Abonnementverwaltung</h3>
 <table>

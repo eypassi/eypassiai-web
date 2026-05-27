@@ -1,22 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eypassiai – Steuer & Vermietung</title>
-    <style>
-        body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 80px auto; padding: 0 24px; color: #1a1a1a; }
-        h1 { font-size: 2rem; }
-        p { color: #555; line-height: 1.6; }
-        a { color: #0a66c2; }
-    </style>
-</head>
-<body>
-    <h1>eypassiai</h1>
-    <p>Steuer- und Mietverwaltungs-App für private Vermieter in Deutschland.</p>
-    <p>
-        <a href="/privacy.html">Datenschutzerklärung</a> &middot;
-        <a href="/terms.html">AGB / EULA</a>
-    </p>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Immobilienverwaltung für private Vermieter: Objekte, Mieter, Buchungen, Belege und Steuer-Vorbereitung in einer App — im Browser und auf dem iPhone." />
+    <meta name="theme-color" content="#060a07" />
+    <title>eypassiai — Immobilienverwaltung für private Vermieter</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://eypassiai.com/" />
+    <meta property="og:title" content="eypassiai — Immobilienverwaltung für private Vermieter" />
+    <meta property="og:description" content="Objekte, Mieter, Buchungen, Belege und Steuer-Vorbereitung in einer App — im Browser und auf dem iPhone." />
+    <meta property="og:image" content="https://eypassiai.com/app-icon.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

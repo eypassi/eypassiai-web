@@ -18,6 +18,8 @@ export default defineConfig({
         app: "app/index.html",
         privacy: "privacy.html",
         terms: "terms.html",
+        impressum: "impressum.html",
+        avv: "avv.html",
       },
     },
   },

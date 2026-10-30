@@ -1,6 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { publicObjectUrl, supabase } from "./supabase";
+import { publicObjectUrl, supabase, supabaseAnonKey, supabaseUrl } from "./supabase";
+import { AI_CONSENT_VERSION, createAiConsentStore } from "./ai-consent";
+import { buildAgentContext } from "./ai-context";
+import { createApprovedAiInvoker } from "./ai-invoke";
+
+const invokeApprovedAi = createApprovedAiInvoker({
+  getSession: () => supabase.auth.getSession(),
+  supabaseUrl,
+  supabaseAnonKey,
+});
+
+const aiConsent = createAiConsentStore({
+  getItem: key => window.localStorage.getItem(key),
+  setItem: (key, value) => window.localStorage.setItem(key, value),
+  removeItem: key => window.localStorage.removeItem(key),
+});
+
+window.addEventListener("storage", event => aiConsent.storageChanged(event.key));
 
 type ViewKey =
   | "dashboard"
@@ -332,15 +349,20 @@ function isImageDocument(document: DocumentRow) {
   return Boolean(document.file_type?.startsWith("image/") || isImageUrl(document.file_url));
 }
 
-function useAiConsent() {
-  const [consented, setConsented] = useState(() => localStorage.getItem("eypassiai.aiConsent") === "true");
+function useAiConsent(accountId: string) {
+  const consentState = useSyncExternalStore(aiConsent.subscribe, () => aiConsent.getSnapshot(accountId), () => "0:false");
+  const consented = consentState.endsWith(":true");
+  const [consentError, setConsentError] = useState<string | null>(null);
 
   function grant() {
-    localStorage.setItem("eypassiai.aiConsent", "true");
-    setConsented(true);
+    setConsentError(aiConsent.grant(accountId) ? null : "Die Freigabe konnte nicht gespeichert werden. Bitte erlaube den lokalen Browserspeicher und versuche es erneut.");
   }
 
-  return { consented, grant };
+  function revoke() {
+    setConsentError(aiConsent.revoke(accountId) ? null : "Die Freigabe ist für diese Sitzung widerrufen. Der Browser konnte den gespeicherten Eintrag nicht entfernen; lösche vor dem erneuten Öffnen den lokalen Website-Speicher.");
+  }
+
+  return { consented, consentState, consentError, grant, revoke, requestApproval: () => aiConsent.requestApproval(accountId) };
 }
 
 export default function App() {
@@ -535,9 +557,9 @@ function LandingPage() {
   const faqs: [string, string][] = [
     ["Für wen ist eypassiai?", "Für private Vermieter in Deutschland mit ein bis zehn Immobilien — die Buchungen, Belege und die Steuervorbereitung ohne komplizierte Buchhaltungssoftware organisieren wollen."],
     ["Gibt es eine iPhone-App?", "Ja. Die native iOS-App steht im Apple App Store und synchronisiert sich über dasselbe Konto mit der Web-App."],
-    ["Wie sicher sind meine Daten?", "Deine Daten liegen auf Servern in der EU und werden nicht für Werbung genutzt. KI-Funktionen senden nur Inhalte, die du ausdrücklich freigibst."],
+    ["Wie sicher sind meine Daten?", "Der Datenspeicher liegt in Frankfurt. Die Prüfung vom 30.10.2026 hat jedoch offene Mängel beim Dateizugriff bestätigt. Lade bis zur bestätigten Behebung keine weiteren vertraulichen personenbezogenen Unterlagen hoch. Details zu den Risiken und internationalen Dienstleistern stehen in der Datenschutzerklärung."],
     ["Was beinhaltet der kostenlose Plan?", "Du kannst Objekte anlegen, das Interface kennenlernen und dein Profil einrichten — ohne Abo und ohne Kreditkarte. Buchungen und Belege sind Teil der bezahlten Pläne."],
-    ["Kann ich jederzeit kündigen?", "Ja. Abos laufen über den Apple App Store und können dort jederzeit gekündigt werden. Der kostenlose Plan bleibt dauerhaft verfügbar."],
+    ["Kann ich jederzeit kündigen?", "Apple-Abos kannst du zum Ende des Abrechnungszeitraums kündigen. Die deutschen Apple-Bedingungen sehen außerdem eine sofortige Kündigung mit anteiliger Erstattung über Apple Support vor. Eine Kontolöschung allein kündigt das Apple-Abo nicht."],
     ["Brauche ich Buchhaltungskenntnisse?", "Nein. Die App führt dich Schritt für Schritt. Die Steuer-Hilfefunktionen strukturieren deine Daten — ersetzen aber keine Steuerberatung."],
   ];
 
@@ -592,8 +614,8 @@ function LandingPage() {
             </div>
             <div className="stat-divider" aria-hidden="true" />
             <div className="stat">
-              <strong>DSGVO</strong>
-              <span>EU-Server</span>
+              <strong>KI optional</strong>
+              <span>Mit Datenfreigabe</span>
             </div>
             <div className="stat-divider" aria-hidden="true" />
             <div className="stat">
@@ -614,7 +636,7 @@ function LandingPage() {
         {(
           [
             ["Keine Kreditkarte beim Start", true],
-            ["DSGVO-konform · EU-Server", true],
+            ["KI-Funktionen optional", true],
             ["iOS-App im App Store", true],
             ["Browser-basiert · kein Download", true],
           ] as const
@@ -802,8 +824,10 @@ function LandingPage() {
           </div>
           <div className="footer-col">
             <strong>Rechtliches</strong>
+            <a href="/impressum.html">Impressum</a>
             <a href="/privacy.html">Datenschutz</a>
             <a href="/terms.html">AGB / EULA</a>
+            <a href="/avv.html">Auftragsverarbeitung</a>
           </div>
         </div>
         <div className="footer-bottom">
@@ -820,14 +844,26 @@ function AppRuntime() {
   const [loadingSession, setLoadingSession] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+    let authEventReceived = false;
     supabase.auth.getSession().then(({ data }) => {
+      if (!mounted || authEventReceived) return;
+      aiConsent.activateAccount(data.session?.user.id ?? null);
       setSession(data.session);
       setLoadingSession(false);
     });
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      if (!mounted) return;
+      authEventReceived = true;
+      aiConsent.activateAccount(nextSession?.user.id ?? null);
       setSession(nextSession);
+      setLoadingSession(false);
     });
-    return () => data.subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      data.subscription.unsubscribe();
+      aiConsent.invalidateRequests();
+    };
   }, []);
 
   if (loadingSession) {
@@ -838,7 +874,8 @@ function AppRuntime() {
     return <AuthScreen />;
   }
 
-  return <Workspace session={session} user={session.user} />;
+  // Remount every view on account changes: forms, files, results and loaded records belong to one account.
+  return <Workspace key={session.user.id} session={session} user={session.user} />;
 }
 
 function Splash() {
@@ -857,16 +894,24 @@ function AuthScreen() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
+    if (mode === "register" && !termsAccepted) {
+      setError("Bitte akzeptiere vor der Registrierung die AGB.");
+      return;
+    }
     setBusy(true);
     setError(null);
     setMessage(null);
     const result =
       mode === "login"
         ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
+        : await supabase.auth.signUp({
+            email, password,
+            options: { data: { terms_version: "2026-10-30", terms_accepted_at: new Date().toISOString() } },
+          });
     if (result.error) setError(result.error.message);
     else if (mode === "register") setMessage("Konto erstellt. Wenn E-Mail-Bestätigung aktiv ist, prüfe dein Postfach.");
     setBusy(false);
@@ -913,22 +958,29 @@ function AuthScreen() {
             autoComplete={mode === "login" ? "current-password" : "new-password"}
           />
         </label>
+        {mode === "register" && (
+          <div className="stack registration-notices">
+            <label className="checkbox-label">
+              <input type="checkbox" checked={termsAccepted} onChange={event => setTermsAccepted(event.target.checked)} required />
+              <span>Ich akzeptiere die <a href="/terms.html" target="_blank" rel="noreferrer">AGB (Stand 30.10.2026)</a>.</span>
+            </label>
+            <p className="fineprint">Wie wir deine Daten verarbeiten, steht in der <a href="/privacy.html" target="_blank" rel="noreferrer">Datenschutzerklärung</a>. Für die Verarbeitung personenbezogener Mieterdaten ist vorab ein <a href="/avv.html" target="_blank" rel="noreferrer">Vertrag zur Auftragsverarbeitung</a> mit bestätigten Anlagen abzuschließen.</p>
+          </div>
+        )}
         {error && <div className="alert error">{error}</div>}
         {message && <div className="alert success">{message}</div>}
-        <button className="primary" disabled={busy || !email || !password}>
+        <button className="primary" disabled={busy || !email || !password || (mode === "register" && !termsAccepted)}>
           {busy ? "Bitte warten..." : mode === "login" ? "Anmelden" : "Registrieren"}
         </button>
         <div className="auth-actions">
-          <button type="button" onClick={() => setMode(mode === "login" ? "register" : "login")}>
+          <button type="button" onClick={() => { setMode(mode === "login" ? "register" : "login"); setTermsAccepted(false); }}>
             {mode === "login" ? "Noch kein Konto?" : "Schon registriert?"}
           </button>
           <button type="button" onClick={resetPassword} disabled={busy}>
             Passwort vergessen
           </button>
         </div>
-        <p className="fineprint">
-          <a href="/privacy.html">Datenschutz</a> · <a href="/terms.html">AGB / EULA</a>
-        </p>
+        <LegalLinks />
       </form>
     </main>
   );
@@ -940,6 +992,15 @@ function Workspace({ session, user }: { session: Session; user: User }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState(0);
+
+  async function signOut() {
+    aiConsent.activateAccount(null);
+    const { error: signOutError } = await supabase.auth.signOut();
+    if (signOutError) {
+      aiConsent.activateAccount(user.id);
+      setError(signOutError.message);
+    }
+  }
 
   async function loadData() {
     setLoading(true);
@@ -1064,7 +1125,7 @@ function Workspace({ session, user }: { session: Session; user: User }) {
           </div>
           <div className="topbar-actions">
             <button onClick={refresh}>Aktualisieren</button>
-            <button onClick={() => supabase.auth.signOut()}>Abmelden</button>
+            <button onClick={signOut}>Abmelden</button>
           </div>
         </header>
         {error && <div className="alert error">{error}</div>}
@@ -1498,7 +1559,12 @@ function ReceiptsView({ data, user, refresh, session }: CrudProps & { session: S
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [scanFiles, setScanFiles] = useState<FileList | null>(null);
   const [signedReceipts, setSignedReceipts] = useState<Record<string, string>>({});
-  const { consented, grant } = useAiConsent();
+  const { consented, consentState, consentError, grant, requestApproval } = useAiConsent(user.id);
+  useEffect(() => {
+    setScanFiles(null);
+    setScanResult(null);
+    setScanning(false);
+  }, [consentState]);
   const receiptTransactions = data.transactions.filter((tx) => {
     const text = [tx.category, tx.notes, tx.vendor, tx.date, propertyName(data, tx.property_id)].join(" ").toLowerCase();
     return (tx.receipt_url || tx.import_source === "bulk") && text.includes(query.toLowerCase());
@@ -1532,20 +1598,30 @@ function ReceiptsView({ data, user, refresh, session }: CrudProps & { session: S
   }, [receiptTransactions.map((tx) => `${tx.id}:${tx.receipt_url}`).join("|")]);
 
   async function scan() {
-    if (!scanFiles?.length || !consented) return;
+    if (!scanFiles?.length) return;
+    const approval = requestApproval();
+    if (!approval) return;
     setScanning(true);
-    const images = await Promise.all(Array.from(scanFiles).map(bytesToBase64));
-    const { data: result, error } = await supabase.functions.invoke("scan-receipt", {
-      body: { images },
-      headers: { "X-User-Tier": "pro" },
-    });
-    if (error) alert(error.message);
-    else setScanResult(result as ScanResult);
-    setScanning(false);
+    try {
+      const images = await Promise.all(Array.from(scanFiles).map(bytesToBase64));
+      if (!approval.isCurrent()) return;
+      const { data: result, error } = await invokeApprovedAi(user.id, approval, "scan-receipt", {
+        body: { images },
+        headers: { "X-User-Tier": "pro" },
+      });
+      if (!approval.isCurrent()) return;
+      if (error) alert(error.message);
+      else setScanResult(result as ScanResult);
+    } catch (error) {
+      if (approval.isCurrent()) alert(error instanceof Error ? error.message : String(error));
+    } finally {
+      approval.release();
+      if (approval.isCurrent()) setScanning(false);
+    }
   }
 
   async function createFromScan() {
-    if (!scanResult) return;
+    if (!scanResult || !aiConsent.isApproved(user.id)) return;
     const file = scanFiles?.[0];
     let receiptUrl: string | null = null;
     if (file) {
@@ -1599,6 +1675,7 @@ function ReceiptsView({ data, user, refresh, session }: CrudProps & { session: S
             </button>
           </div>
         )}
+        {consentError && <p className="alert error" role="alert">{consentError}</p>}
         {scanResult && (
           <div className="result-box">
             <strong>{scanResult.vendor ?? "Unbekannter Anbieter"}</strong>
@@ -1611,7 +1688,7 @@ function ReceiptsView({ data, user, refresh, session }: CrudProps & { session: S
             </button>
           </div>
         )}
-        <p className="fineprint">Angemeldet als {session.user.email}. KI-Daten laufen über Supabase Edge Functions und Anthropic.</p>
+        <p className="fineprint">Der Scan sendet die vollständig ausgewählten Belegbilder einschließlich sichtbarer personenbezogener Angaben über Supabase an Anthropic. Angemeldet als {session.user.email}. Die Freigabe kannst du im Profil widerrufen.</p>
       </div>
       <div className="panel">
         <div className="panel-head">
@@ -1638,7 +1715,12 @@ function DocumentsView({ data, user, refresh }: CrudProps) {
   const [chatInput, setChatInput] = useState("");
   const [chatAnswer, setChatAnswer] = useState<string | null>(null);
   const [chatting, setChatting] = useState(false);
-  const { consented, grant } = useAiConsent();
+  const { consented, consentState, consentError, grant, requestApproval } = useAiConsent(user.id);
+  useEffect(() => {
+    if (!consented) setChatInput("");
+    setChatAnswer(null);
+    setChatting(false);
+  }, [consentState]);
   const filtered = data.documents.filter((doc) =>
     [doc.name, doc.category, propertyName(data, doc.property_id), tenantName(data, doc.tenant_id ?? "")].join(" ").toLowerCase().includes(query.toLowerCase()),
   );
@@ -1673,22 +1755,31 @@ function DocumentsView({ data, user, refresh }: CrudProps) {
   }
 
   async function askDocuments() {
-    if (!chatInput.trim() || !consented) return;
+    if (!chatInput.trim()) return;
+    const approval = requestApproval();
+    if (!approval) return;
     setChatting(true);
     const documentContext = filtered
       .slice(0, 20)
       .map((doc) => `${doc.name} (${doc.category}, ${propertyName(data, doc.property_id)})`)
       .join("\n");
-    const { data: result, error } = await supabase.functions.invoke("doc-chat", {
-      body: {
-        messages: [{ role: "user", content: chatInput }],
-        documentContext,
-        documentUrls: [],
-      },
-    });
-    if (error) alert(error.message);
-    else setChatAnswer((result as { text: string }).text);
-    setChatting(false);
+    try {
+      const { data: result, error } = await invokeApprovedAi(user.id, approval, "doc-chat", {
+        body: {
+          messages: [{ role: "user", content: chatInput }],
+          documentContext,
+          documentUrls: [],
+        },
+      });
+      if (!approval.isCurrent()) return;
+      if (error) alert(error.message);
+      else setChatAnswer((result as { text: string }).text);
+    } catch (error) {
+      if (approval.isCurrent()) alert(error instanceof Error ? error.message : String(error));
+    } finally {
+      approval.release();
+      if (approval.isCurrent()) setChatting(false);
+    }
   }
 
   return (
@@ -1716,7 +1807,9 @@ function DocumentsView({ data, user, refresh }: CrudProps) {
       <div className="panel">
         <p className="kicker">Dokumenten-Chat</p>
         <h2>Frage zu deinen Dokumenten</h2>
+        <p className="fineprint">Gesendet werden deine Frage sowie Name, Kategorie und Objektadresse der ersten 20 Dokumente im aktuellen Suchergebnis. Die Dokumentdateien werden in diesem Web-Chat nicht mitgesendet. Widerruf der KI-Freigabe im Profil.</p>
         {!consented ? <AiConsent onAccept={grant} /> : null}
+        {consentError && <p className="alert error" role="alert">{consentError}</p>}
         <div className="button-row">
           <input value={chatInput} onChange={(event) => setChatInput(event.target.value)} placeholder="Was steht im Mietvertrag?" />
           <button className="primary" onClick={askDocuments} disabled={!consented || chatting}>
@@ -1935,30 +2028,38 @@ function AgentView({ data, user, refresh }: CrudProps) {
   const [command, setCommand] = useState("");
   const [result, setResult] = useState<{ action_type: string; data: Record<string, unknown> } | null>(null);
   const [busy, setBusy] = useState(false);
-  const { consented, grant } = useAiConsent();
+  const { consented, consentState, consentError, grant, requestApproval } = useAiConsent(user.id);
+  useEffect(() => {
+    if (!consented) setCommand("");
+    setResult(null);
+    setBusy(false);
+  }, [consentState]);
 
   async function send() {
-    if (!command.trim() || !consented) return;
+    if (!command.trim()) return;
+    const approval = requestApproval();
+    if (!approval) return;
     setBusy(true);
-    const { data: response, error } = await supabase.functions.invoke("agent-command", {
-      body: {
-        command,
-        context: {
-          properties: data.properties,
-          tenants: data.tenants,
-          contracts: data.contracts,
-          categories,
-          today: today(),
+    try {
+      const { data: response, error } = await invokeApprovedAi(user.id, approval, "agent-command", {
+        body: {
+          command,
+          context: buildAgentContext(data, categories, today()),
         },
-      },
-    });
-    if (error) alert(error.message);
-    else setResult(response as { action_type: string; data: Record<string, unknown> });
-    setBusy(false);
+      });
+      if (!approval.isCurrent()) return;
+      if (error) alert(error.message);
+      else setResult(response as { action_type: string; data: Record<string, unknown> });
+    } catch (error) {
+      if (approval.isCurrent()) alert(error instanceof Error ? error.message : String(error));
+    } finally {
+      approval.release();
+      if (approval.isCurrent()) setBusy(false);
+    }
   }
 
   async function applyResult() {
-    if (!result) return;
+    if (!result || !aiConsent.isApproved(user.id)) return;
     if (result.action_type === "create_transaction") {
       await supabase.from("transactions").insert({
         user_id: user.id,
@@ -1980,7 +2081,9 @@ function AgentView({ data, user, refresh }: CrudProps) {
       <div className="panel">
         <p className="kicker">KI-Assistent</p>
         <h2>Buchungen und Fahrten per Text vorbereiten</h2>
+        <p className="fineprint">Gesendet werden dein Auftrag, die IDs, Adressen und Arten deiner geladenen Objekte, die IDs, Namen und Objektzuordnungen deiner Mieter sowie ihre Vertragszuordnung und Monatsmiete, die Buchungskategorien und das heutige Datum. E-Mail-Adressen, Telefonnummern, Bilder, Vertragsnotizen und Kautionen werden nicht als Kontext mitgesendet. Widerruf der KI-Freigabe im Profil.</p>
         {!consented ? <AiConsent onAccept={grant} /> : null}
+        {consentError && <p className="alert error" role="alert">{consentError}</p>}
         <div className="button-row">
           <input value={command} onChange={(event) => setCommand(event.target.value)} placeholder="z. B. Miete von Anna für Mai buchen" />
           <button className="primary" onClick={send} disabled={!consented || busy}>
@@ -2000,6 +2103,7 @@ function AgentView({ data, user, refresh }: CrudProps) {
 }
 
 function ProfileView({ data, user, refresh }: CrudProps) {
+  const { consented, consentError, grant, revoke } = useAiConsent(user.id);
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -2020,6 +2124,24 @@ function ProfileView({ data, user, refresh }: CrudProps) {
           <input name="display_name" defaultValue={data.profile?.display_name ?? ""} placeholder="Anzeigename" />
           <button className="primary">Speichern</button>
         </form>
+      </div>
+      <div className="panel">
+        <p className="kicker">Datenschutz</p>
+        <h2>KI-Datenfreigabe</h2>
+        <p>Die Freigabe gilt nur für dieses Konto in diesem Browser, Version {AI_CONSENT_VERSION}. Bei einem anderen Konto ist eine eigene Freigabe erforderlich.</p>
+        {consented ? (
+          <div className="stack">
+            <p role="status">KI-Funktionen für dieses Konto freigegeben.</p>
+            <button className="danger" onClick={revoke}>KI-Freigabe widerrufen</button>
+            <p className="fineprint">Der Widerruf sperrt neue KI-Anfragen und verwirft offene KI-Ergebnisse. Bereits versendete Daten lassen sich dadurch nicht zurückholen.</p>
+          </div>
+        ) : <AiConsent onAccept={grant} />}
+        {consentError && <p className="alert error" role="alert">{consentError}</p>}
+      </div>
+      <div className="panel">
+        <h2>Rechtliche Informationen</h2>
+        <LegalLinks />
+        <p className="fineprint">Für personenbezogene Mieterdaten ist vorab eine Vereinbarung zur Auftragsverarbeitung mit bestätigten Anlagen erforderlich. Die verlinkte AVV ist ein Vertragsentwurf und wird nicht durch einen Login automatisch angenommen.</p>
       </div>
     </section>
   );
@@ -2145,15 +2267,32 @@ function MediaStrip({ urls, title }: { urls: string[]; title: string }) {
   );
 }
 
+function LegalLinks() {
+  return (
+    <nav className="legal-links fineprint" aria-label="Rechtliche Informationen">
+      <a href="/impressum.html">Impressum</a>
+      <a href="/terms.html">AGB / EULA</a>
+      <a href="/privacy.html">Datenschutz</a>
+      <a href="/avv.html">Auftragsverarbeitung</a>
+    </nav>
+  );
+}
+
 function AiConsent({ onAccept }: { onAccept: () => void }) {
   return (
     <div className="consent">
-      <strong>KI-Datenfreigabe erforderlich</strong>
+      <strong>Freiwillige KI-Datenfreigabe für dieses Konto</strong>
       <p>
-        Für diese Funktion werden die ausgewählten Texte, Bilder oder Dokumentinformationen an eine Supabase Edge Function und
-        Anthropic PBC gesendet, um Belege zu erkennen oder Fragen zu beantworten. Ohne Zustimmung werden keine KI-Daten übertragen.
+        Mit deiner Freigabe dürfen die folgenden Daten bei Nutzung der jeweiligen KI-Funktion über Supabase Edge Functions an
+        Anthropic PBC zur Verarbeitung gesendet werden. Anthropic ist ein US-Anbieter; dabei kann eine Drittlandübermittlung stattfinden.
       </p>
-      <button className="primary" onClick={onAccept}>Ich stimme zu</button>
+      <ul>
+        <li>Belegscan: die von dir ausgewählten vollständigen Belegbilder mit allen darin sichtbaren Angaben.</li>
+        <li>Dokumenten-Chat: deine Frage, Namen, Kategorien und Objektadressen von bis zu 20 Dokumenten im aktuellen Suchergebnis; keine Dokumentdateien.</li>
+        <li>KI-Assistent: dein Auftrag, Objekt-IDs, Adressen und Objektarten, Mieter-IDs und Namen mit Objektzuordnung, Vertragszuordnung und Monatsmiete sowie Kategorien und Datum.</li>
+      </ul>
+      <p>Du kannst die übrige Verwaltung ohne KI-Freigabe nutzen und die Freigabe jederzeit im Profil für die Zukunft widerrufen. Details zu Empfängern, Aufbewahrung und Übermittlungen stehen in der <a href="/privacy.html" target="_blank" rel="noreferrer">Datenschutzerklärung</a>.</p>
+      <button className="primary" onClick={onAccept}>KI-Verarbeitung für dieses Konto erlauben</button>
     </div>
   );
 }

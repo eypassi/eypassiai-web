@@ -26,6 +26,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Test account privacy boundaries
+        run: npm test
       - name: Build website
         run: npm run build
       - name: Verify published files

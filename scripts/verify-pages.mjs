@@ -5,10 +5,11 @@ import { fileURLToPath } from "node:url";
 
 const project = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const output = resolve(project, process.argv[2] || "dist");
-const pages = ["index.html", "app/index.html", "privacy.html", "terms.html", "knie/index.html"];
+const pages = ["index.html", "app/index.html", "privacy.html", "terms.html", "impressum.html", "avv.html", "knie/index.html"];
 
 for (const page of pages) {
   const html = await readFile(resolve(output, page), "utf8");
+  assert.ok(!/(?:src|href)=["']https:\/\/fonts\.(?:googleapis|gstatic)\.com/i.test(html), `${page}: remote fonts must not be requested`);
   if (page === "index.html" || page === "app/index.html") {
     const modules = [...html.matchAll(/<script\b[^>]*src=["']([^"']+)["'][^>]*>/g)];
     assert.ok(modules.length > 0, `${page}: missing application bundle`);

@@ -3,3 +3,6 @@ dist/
 *.tsbuildinfo
 .superpowers/
 .DS_Store
+
+# Internal legal reviews and business-registration preparation can contain private facts.
+docs/legal/

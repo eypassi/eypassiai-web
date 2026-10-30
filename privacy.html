@@ -52,6 +52,18 @@
         a:hover {
             text-decoration: underline;
         }
+        a:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 3px;
+        }
+        nav {
+            margin-bottom: 1.5em;
+            line-height: 1.9;
+        }
+        p, li, th, td {
+            overflow-wrap: anywhere;
+            hyphens: auto;
+        }
         .meta {
             color: #666;
             font-size: 0.9rem;
@@ -87,201 +99,73 @@
     </style>
 </head>
 <body>
-
+<nav aria-label="Rechtliche Informationen"><a href="/">Startseite</a> · <a href="/impressum.html">Impressum</a> · <a href="/terms.html">AGB</a> · <a href="/avv.html">Auftragsverarbeitung</a></nav>
+<main>
 <h1>Datenschutzerklärung</h1>
-<p class="meta">Stand: 15. Mai 2026 &middot; Gültig für die iOS-App <strong>eypassiai</strong> und die Website eypassiai.com</p>
+<p class="meta">Stand: 30. Oktober 2026 · Version 2026-10-30 · Für die iOS-App eypassiai, die Website eypassiai.com und die Browser-Anwendung</p>
 
-<p>Der Schutz Ihrer personenbezogenen Daten ist uns ein zentrales Anliegen. Diese Datenschutzerklärung informiert Sie gemäß Art. 13 und 14 der EU-Datenschutz-Grundverordnung (DSGVO) sowie den ergänzenden Bestimmungen des Bundesdatenschutzgesetzes (BDSG) über Art, Umfang und Zweck der Verarbeitung personenbezogener Daten bei der Nutzung unserer App und unserer Website.</p>
+<h2>1. Ansprechpartner und Rollen</h2>
+<p>Verantwortlich für die Verarbeitung der Konto-, Vertrags- und Betriebsdaten des Dienstes ist:</p>
+<p><strong>Pascal Weber</strong><br>Babenhäuser Str. 15<br>64859 Eppertshausen<br>Deutschland<br>E-Mail: <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a></p>
+<p>Wenn Sie als Vermieter personenbezogene Daten von Mietern und anderen Personen im Dienst verwalten, bestimmen Sie grundsätzlich die Zwecke und Rechtsgrundlagen dieser Verarbeitung. Wir verarbeiten diese Inhalte nach Ihren Weisungen als Auftragsverarbeiter, soweit die DSGVO auf Ihre Tätigkeit anwendbar ist. Die hierzu erforderliche Vereinbarung ist gesondert zu schließen; <a href="/avv.html">Informationen und Vertragsentwurf zur Auftragsverarbeitung</a>. Diese Datenschutzerklärung allein schließt keinen solchen Vertrag.</p>
 
-<h2>1. Verantwortlicher</h2>
-<p>Verantwortlicher im Sinne der DSGVO ist:</p>
-<p>
-    <strong>Pascal Weber</strong><br>
-    Einzelunternehmer<br>
-    Babenhäuser Str. 15<br>
-    64859 Eppertshausen<br>
-    E-Mail: <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a><br>
-    Website: <a href="https://eypassiai.com">https://eypassiai.com</a>
-</p>
-<p>Ein Datenschutzbeauftragter ist gesetzlich nicht erforderlich und wurde nicht bestellt. Anfragen zum Datenschutz richten Sie bitte an die oben genannte E-Mail-Adresse.</p>
+<h2>2. Website, Hosting und Speicherung im Browser</h2>
+<p>Website und Browser-Anwendung werden über <strong>GitHub Pages, GitHub, Inc. (USA)</strong> ausgeliefert. Dabei werden insbesondere IP-Adresse und technische Verbindungsdaten verarbeitet. GitHub protokolliert Besucher-IP-Adressen zu Sicherheitszwecken auch ohne GitHub-Konto. Zweck ist die Auslieferung und Absicherung des Angebots; Rechtsgrundlage für unsere Veranlassung dieser Verarbeitung ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem erreichbaren, sicheren Internetangebot). Einzelheiten: <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection">GitHub Pages und Datenerhebung</a>, <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub-Datenschutzerklärung</a>.</p>
+<p>Für die von Ihnen angeforderte Anmeldung speichert die Browser-Anwendung Sitzungsdaten und Authentifizierungstoken lokal im Browser. Dadurch bleibt die Anmeldung bei weiteren Aufrufen erhalten; Token werden zur Prüfung und Erneuerung der Sitzung an Supabase gesendet. Zudem wird die KI-Freigabe im Browser dem jeweiligen Konto zugeordnet und mit Versionskennung und Zeitpunkt lokal gespeichert. Die einmalige Freigabe gilt für die im Dialog gemeinsam beschriebenen KI-Funktionen; sie wird nicht für jede Funktion getrennt gespeichert. Diese Speicherungen dienen der Anmeldung und der von Ihnen gewählten Funktion, nicht der Werbeverfolgung. Die erforderliche Speicherung beziehungsweise der Zugriff erfolgt auf Grundlage von § 25 Abs. 2 Nr. 2 TDDDG; die anschließende Verarbeitung der Kontodaten auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, die Verarbeitung aufgrund einer KI-Einwilligung auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO.</p>
+<p>Sie können lokale Daten über die Browser-Einstellungen entfernen; dadurch werden Sie gegebenenfalls abgemeldet und Ihre Einstellungen zurückgesetzt. Ein Entfernen lokaler Daten löscht die Daten im Nutzerkonto nicht. Speichern Sie Zugangsdaten auf gemeinsam genutzten Geräten nur, wenn andere Personen keinen Zugriff darauf erhalten. Wir setzen keine Werbe-Tracker ein. Die kontobezogene Auswertung von Abonnementdaten durch RevenueCat ist in Abschnitt 6 beschrieben.</p>
 
-<h2>2. Allgemeines zur Datenverarbeitung</h2>
-<p>Wir verarbeiten personenbezogene Daten unserer Nutzerinnen und Nutzer grundsätzlich nur, soweit dies zur Bereitstellung einer funktionsfähigen App sowie unserer Inhalte und Leistungen erforderlich ist. Die Verarbeitung erfolgt regelmäßig nur nach Einwilligung des Nutzers (Art. 6 Abs. 1 lit. a DSGVO), zur Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO), zur Erfüllung rechtlicher Verpflichtungen (Art. 6 Abs. 1 lit. c DSGVO) oder auf Grundlage berechtigter Interessen (Art. 6 Abs. 1 lit. f DSGVO).</p>
-
-<h2>3. Welche Daten wir verarbeiten</h2>
-<p>Bei der Nutzung der App <strong>eypassiai</strong> verarbeiten wir die folgenden Kategorien personenbezogener Daten:</p>
-
-<h3>3.1 Konto- und Authentifizierungsdaten</h3>
+<h2>3. Nutzerkonto, Vertragsverwaltung und Support</h2>
 <ul>
-    <li>E-Mail-Adresse</li>
-    <li>Passwort-Hash (niemals im Klartext, verschlüsselte Speicherung über Supabase Auth)</li>
-    <li>Apple-ID-Token bei Anmeldung über „Sign in with Apple“</li>
-    <li>Zeitpunkt der Registrierung, der letzten Anmeldung sowie Geräteinformationen zur Sitzungsverwaltung</li>
+<li><strong>Konto:</strong> E-Mail-Adresse, interne Nutzerkennung, Anmeldemethode, Registrierungs- und Anmeldezeitpunkte sowie Sitzungsinformationen. Bei Passwortanmeldung verarbeitet Supabase Auth das Passwort zur Authentifizierung und speichert einen Passwort-Hash. Bei „Mit Apple anmelden“ werden die von Apple bereitgestellten Anmeldedaten und gegebenenfalls eine private Relay-E-Mail-Adresse verarbeitet.</li>
+<li><strong>Vertrag:</strong> gebuchter Tarif, Berechtigungen und, soweit beim jeweiligen Registrierungsweg erfasst, die akzeptierte Vertragsversion und der Zeitpunkt der Erklärung.</li>
+<li><strong>Support:</strong> Kontaktdaten, Inhalt Ihrer Anfrage und die zur Bearbeitung erforderlichen Angaben. Bitte senden Sie uns keine unnötigen Mieter- oder Steuerunterlagen per unverschlüsselter E-Mail.</li>
 </ul>
-<p><em>Rechtsgrundlage:</em> Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO).</p>
+<p>Zweck ist die Bereitstellung und Verwaltung des Dienstes sowie die Bearbeitung Ihrer Anfragen. Rechtsgrundlagen sind Art. 6 Abs. 1 lit. b DSGVO, bei gesetzlichen Nachweis- und Aufbewahrungspflichten lit. c und bei der Abwehr oder Durchsetzung von Ansprüchen lit. f. Ohne die für das Konto erforderlichen Angaben können wir keinen kontobasierten Zugang bereitstellen.</p>
 
-<h3>3.2 Steuer- und Immobiliendaten</h3>
-<ul>
-    <li>Angaben zu Immobilienobjekten (Adresse, Kaufpreis, Anschaffungsdatum, Wohnfläche, Grundstücksanteil)</li>
-    <li>Buchungsdaten zu Einnahmen und Ausgaben (Beträge, Buchungsdatum, Kategorie, Notizen)</li>
-    <li>AfA-Berechnungen und Abschreibungspläne</li>
-    <li>Fahrtkostenaufzeichnungen (Start, Ziel, Distanz, Datum, Zweck)</li>
-    <li>Nebenkostenabrechnungen (Verteilerschlüssel, Verbrauchsdaten, Abrechnungszeiträume)</li>
-    <li>Belege und Quittungen als Bilddateien (PNG, JPEG, PDF)</li>
-</ul>
-<p><em>Rechtsgrundlage:</em> Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO).</p>
+<h2>4. Immobilien-, Buchungs-, Mieter- und Dokumentendaten</h2>
+<p>Je nach Nutzung speichern und verarbeiten wir Immobilienadressen, Anschaffungs- und Flächenangaben, Einheiten, Einnahmen, Ausgaben, Beträge, Kategorien, Notizen, Abschreibungsberechnungen, Fahrten, Nebenkosten und Abrechnungen. Hinzu kommen hochgeladene Bilder, Belege, PDFs und Verträge sowie darin enthaltene personenbezogene Angaben. Mieter- und Vertragsdaten können insbesondere Namen, Kontaktdaten, Mietbeginn und -ende, Miethöhe, Kaution und Zahlungsangaben enthalten. Die Daten stammen aus Ihren Eingaben und Uploads sowie aus von Ihnen ausgelösten Importen oder Auswertungen.</p>
+<p>Eigene personenbezogene Daten des Nutzers verarbeiten wir zur Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO). Bei den von Ihnen verantworteten Daten Dritter erfolgt die Verarbeitung nach Ihren Weisungen. Der Nutzungsvertrag mit Ihnen ist nicht automatisch eine Rechtsgrundlage für die Verarbeitung aller Mieterdaten: Sie müssen insbesondere Erforderlichkeit, Rechtsgrundlage, Informationspflichten und Aufbewahrung für Ihre Vermietung prüfen. Der Dienst ist nicht für die gezielte Verarbeitung besonderer Kategorien personenbezogener Daten nach Art. 9 DSGVO vorgesehen.</p>
 
-<h3>3.3 Mieter- und Vertragsdaten</h3>
-<ul>
-    <li>Name und Anschrift der Mieterinnen und Mieter</li>
-    <li>Vertragsbeginn, Vertragsende, Kündigungsfristen</li>
-    <li>Höhe von Kaltmiete, Nebenkosten und Kaution</li>
-    <li>Hochgeladene Mietvertragsdokumente</li>
-    <li>Kommunikationshistorie (sofern in der App erfasst)</li>
-</ul>
-<p>Diese Daten werden ausschließlich für Sie als Vermieter gespeichert. Mieterinnen und Mieter sind nicht selbst Nutzer der App. Sie als Vermieter sind verantwortlich dafür, dass die Erhebung und Speicherung dieser Daten durch ein bestehendes Mietverhältnis gerechtfertigt ist.</p>
-<p><em>Rechtsgrundlage:</em> Vertragserfüllung gegenüber dem Nutzer (Art. 6 Abs. 1 lit. b DSGVO); der Nutzer ist datenschutzrechtlich verantwortlich für die Mieterdaten im Sinne eines Auftragsverarbeitungsverhältnisses.</p>
+<h2>5. Optionale KI-Funktionen und Anthropic</h2>
+<p>Für Belegauswertung, Importe, KI-Assistent und Dokumenten-Chat wird die Claude-API von <strong>Anthropic PBC (USA)</strong> über Supabase Edge Functions angesprochen. Der Inhalt wird an Supabase und anschließend an Anthropic übermittelt. Abhängig von der angeforderten Funktion betrifft dies Belegbilder, PDF-Seiten und Texte, Dokumentnamen, Dateien oder Dateiverweise, Chatnachrichten sowie Kontext aus den im Konto geladenen Immobilien-, Einheiten-, Mieter-, Vertrags-, Buchungs- und Fahrtendaten. Auch Adressen, Beträge, Kategorien und Notizen können Bestandteil dieses Kontexts sein. Der Assistent kann somit mehr Daten erhalten als nur die zuletzt eingegebene Chatnachricht.</p>
+<p>Die KI-Verarbeitung ist optional und setzt Ihre vorherige Einwilligung in die beschriebenen KI-Datenflüsse voraus (Art. 6 Abs. 1 lit. a DSGVO). Im Browser können Sie die kontobezogene Freigabe im Profil für die Zukunft widerrufen und den Dienst ohne weitere KI-Aufrufe nutzen. Wenden Sie sich dafür auch an <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a>. Bereits erfolgte Übermittlungen lassen sich durch den Widerruf nicht rückgängig machen. Eine Einwilligung von Ihnen ersetzt nicht die erforderliche Rechtsgrundlage für Daten Ihrer Mieter; übermitteln Sie nur Inhalte, die Sie für den angeforderten Zweck verarbeiten lassen dürfen.</p>
+<p>Im Browser übermittelt der KI-Assistent Ihren Auftrag, IDs, Adressen und Arten der geladenen Objekte, IDs und Namen der Mieter mit Objektzuordnung, Vertragszuordnung und Monatsmiete sowie Buchungskategorien und das aktuelle Datum. E-Mail-Adressen, Telefonnummern, Fotos, Vertragsnotizen und Kautionen werden dort nicht als zusätzlicher Kontokontext mitgesendet. Der Browser-Dokumentenchat übermittelt Ihre Frage sowie Namen, Kategorien und Objektadressen der ersten 20 Dokumente des aktuellen Suchergebnisses, nicht deren Dateien. Bei einem Belegscan werden die von Ihnen ausgewählten Bilder übermittelt. Angaben, die Sie selbst in eine Nachricht oder ein Bild aufnehmen, können unabhängig von diesen Kontextgrenzen enthalten sein. Diese Browser-Begrenzungen sind keine Zusage über den identischen Funktionsumfang der iOS-App.</p>
+<p>Nach den <a href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data">Anthropic-Regeln für kommerzielle API-Daten</a> werden Ein- und Ausgaben regulär innerhalb von 30 Tagen gelöscht. Ausnahmen gelten unter anderem für gesetzliche Pflichten, Missbrauchsprüfungen, gesonderte Vereinbarungen und Funktionen mit abweichender Speicherung. Bei als Richtlinienverstoß erkannten Inhalten nennt Anthropic bis zu zwei Jahre für Ein- und Ausgaben und bis zu sieben Jahre für zugehörige Klassifikationen; für übermitteltes Feedback gelten gesonderte Fristen. Eine besondere Zero-Retention-Vereinbarung für unseren Zugang ist nicht nachgewiesen. Deshalb sagen wir keine ausnahmslose Löschung aller KI-Daten nach 30 Tagen zu.</p>
+<p>Für die kommerzielle API gelten die <a href="https://www.anthropic.com/legal/commercial-terms">kommerziellen Bedingungen</a> und das <a href="https://www.anthropic.com/legal/data-processing-addendum">Anthropic-DPA</a>. Eine Nutzung Ihrer Inhalte zum Modelltraining wird von uns nicht beauftragt. KI-Ausgaben können fehlerhaft sein; Entscheidungen mit rechtlichen oder vergleichbar erheblichen Folgen treffen wir nicht automatisiert für Sie (Art. 22 DSGVO).</p>
 
-<h3>3.4 Nutzungs- und Logdaten</h3>
-<ul>
-    <li>Technische Logdaten der Supabase-Infrastruktur (IP-Adresse, Zeitstempel, abgerufene Endpunkte) zur Sicherstellung des Betriebs und zur Abwehr von Angriffen</li>
-    <li>Fehlerprotokolle bei App-Abstürzen (anonymisiert, kein Tracking)</li>
-</ul>
-<p>Wir verwenden <strong>keine</strong> Analyse-Frameworks wie Firebase Analytics, Google Analytics, Facebook SDK, Adjust, Mixpanel oder ähnliche Tools. Wir versenden <strong>keine</strong> Push-Benachrichtigungen. Wir setzen <strong>keine</strong> Tracking-Cookies oder Werbe-IDs ein.</p>
-<p><em>Rechtsgrundlage:</em> Berechtigtes Interesse an einem stabilen und sicheren Betrieb (Art. 6 Abs. 1 lit. f DSGVO).</p>
+<h2>6. Apple und RevenueCat: Käufe und Berechtigungen</h2>
+<p>Kostenpflichtige Abonnements werden derzeit ausschließlich über den Apple App Store abgeschlossen. Apple verarbeitet die für den Kauf erforderlichen Apple-Account-, Zahlungs- und Rechnungsdaten nach eigenen Bedingungen. Für den deutschen Store ist in der Regel <strong>Apple Distribution International Ltd., Hollyhill Industrial Estate, Hollyhill, Cork, Irland</strong> der eingetragene Händler. Wir erhalten zur Bereitstellung des Abos Kauf- und Berechtigungsinformationen, jedoch keine vollständigen Kreditkartendaten. Siehe <a href="https://www.apple.com/legal/privacy/de-ww/">Apple-Datenschutz</a>.</p>
+<p>Für die Prüfung und Zuordnung von Abonnements nutzen wir <strong>RevenueCat, Inc. (USA)</strong>. Dabei werden insbesondere Kaufbelege beziehungsweise Transaktionskennungen, Produkt, Kaufzeitpunkt, Laufzeit, Verlängerungs- und Berechtigungsstatus sowie technische SDK-Daten verarbeitet. Im nativen Dienst wird die interne Supabase-Nutzer-UUID als RevenueCat-App-User-ID verwendet und die E-Mail-Adresse als Kundenattribut übermittelt. Diese Daten sind mit Ihrem Konto verknüpft und <strong>nicht anonym</strong>. Im Browser wird der Ihrem Konto zugeordnete Berechtigungsstatus abgerufen.</p>
+<p>Die Verarbeitung dient der Freischaltung, Wiederherstellung und Verwaltung Ihres Abonnements (Art. 6 Abs. 1 lit. b DSGVO). RevenueCat stellt außerdem kontobezogene Kaufhistorien und Auswertungen zur Entwicklung der Abonnements bereit. Diese Abo-Analyse dient unserem berechtigten Interesse an der Verwaltung und wirtschaftlichen Planung des Dienstes (Art. 6 Abs. 1 lit. f DSGVO); sie ist keine anonyme Verarbeitung und kein dienstübergreifendes Werbetracking. Zum Widerspruchsrecht siehe Abschnitt 11. Weitere Informationen: <a href="https://www.revenuecat.com/privacy/">RevenueCat-Datenschutz</a>, <a href="https://www.revenuecat.com/docs/platform-resources/apple-platform-resources/apple-app-privacy">RevenueCat zur Kaufdaten-Analyse</a> und <a href="https://www.revenuecat.com/dpa">RevenueCat-DPA</a>. Die Löschung des eypassiai-Kontos beendet ein Apple-Abonnement nicht; siehe <a href="/terms.html#kuendigung">Kündigungshinweise</a>.</p>
 
-<h3>3.5 Zahlungs- und Abonnementdaten</h3>
-<ul>
-    <li>Abonnementstatus (Free, Basis, Pro)</li>
-    <li>Anonymisierte RevenueCat-Kennung zur Zuordnung des Abonnements</li>
-    <li>Apple-Kaufquittung (Receipt) zur Validierung des Abonnements</li>
-</ul>
-<p>Die eigentliche Zahlungsabwicklung erfolgt vollständig über Apple Inc. Wir erhalten <strong>keine</strong> Kreditkartendaten, IBAN-Informationen oder vollständigen Rechnungsadressen.</p>
-<p><em>Rechtsgrundlage:</em> Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO).</p>
+<h2>7. Infrastruktur, Empfänger und Drittlandübermittlungen</h2>
+<p><strong>Supabase</strong> stellt Authentifizierung, PostgreSQL-Datenbank, Dateispeicher und Edge Functions bereit. Hier werden Konto- und Inhaltsdaten verarbeitet. Die am 30. Oktober 2026 durch eine lesende Konfigurationsprüfung bestätigte Projektregion ist <strong>AWS eu-central-1 (Frankfurt, Deutschland)</strong>. Ein EU-Projektstandort schließt insbesondere administrative Zugriffe, Supportverarbeitung oder eine Verarbeitung durch weitere Dienstleister außerhalb des EWR nicht aus.</p>
+<p>GitHub, Supabase, Anthropic und RevenueCat sind US-Anbieter beziehungsweise verwenden internationale Infrastruktur. Eine Verarbeitung oder ein Zugriff aus den USA oder anderen Drittländern kann daher mehrere Dienste betreffen. Die Übermittlung ist nicht auf Anthropic beschränkt. Ein EU-Speicherstandort allein ist keine Transfergarantie.</p>
+<p>Die Anbieter veröffentlichen vertragliche Datenschutzregelungen und Transfermechanismen, insbesondere EU-Standardvertragsklauseln; beim jeweiligen Anbieter kann außerdem ein einschlägiger Angemessenheitsbeschluss eine Rolle spielen. Entscheidend sind der tatsächlich vereinbarte Vertragspartner, die einbezogene Vertragsversion, die Empfänger und die konkrete Verarbeitung. Die vollständige konto- und dienstbezogene Dokumentation dieser Grundlagen ist derzeit noch nicht abgeschlossen. Wir behaupten daher weder eine gesonderte Unterschrift unter sämtliche Anbieter-DPAs noch eine bereits vollständig bestätigte Transferprüfung. Informationen über die einschlägigen Garantien und deren Kopien können Sie bei uns anfordern.</p>
+<p>Anbieterunterlagen: <a href="https://supabase.com/legal/customer-resources/data-processing-addendum">Supabase-DPA</a>, <a href="https://www.anthropic.com/legal/data-processing-addendum">Anthropic-DPA</a>, <a href="https://www.revenuecat.com/dpa">RevenueCat-DPA</a> und <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub-Datenschutz</a>. Weitere Empfänger können Behörden, Gerichte oder beruflich zur Verschwiegenheit verpflichtete Berater sein, wenn eine gesetzliche Pflicht oder die erforderliche Rechtsverfolgung dies verlangt.</p>
 
-<h2>4. Ort der Datenverarbeitung und -speicherung</h2>
-<p>Sämtliche Nutzerdaten (Konto, Buchungen, Belege, Mieter- und Vertragsdaten, Fahrtkosten, Nebenkostenabrechnungen) werden in der Datenbank- und Storage-Infrastruktur unseres Auftragsverarbeiters <strong>Supabase Inc.</strong> gespeichert. Der Speicherstandort ist <strong>AWS eu-west-1 (Irland, EU)</strong>.</p>
-<p>Eine Übermittlung in ein Drittland außerhalb der EU/des EWR findet ausschließlich in folgendem, eng begrenztem Umfang statt:</p>
-<ul>
-    <li><strong>Anthropic PBC (USA)</strong> &ndash; ausschließlich nach vorheriger Zustimmung bei aktiver Nutzung der KI-Funktionen (Belegscan, Ordner-Import, KI-Assistent, Dokumenten-Chat). Siehe Abschnitt 5.2.</li>
-</ul>
-<p>Für diese Übermittlung haben wir Standardvertragsklauseln gemäß Art. 46 Abs. 2 lit. c DSGVO mit dem Empfänger abgeschlossen.</p>
+<h2>8. Gerätedaten und technische Protokolle</h2>
+<p>Wenn Sie eine entsprechende Funktion auslösen, kann die iOS-App um Zugriff auf Kamera, Fotos, Dateien oder Standort bitten. Sie entscheiden über die Betriebssystem-Berechtigung und können sie dort widerrufen. Standortdaten dienen, soweit genutzt, der Erfassung einer Fahrt; eine dauernde Standortverfolgung wird damit nicht beauftragt. Auch importierte Dateien können personenbezogene Daten anderer Personen enthalten.</p>
+<p>Bei Serveraufrufen verarbeiten die eingesetzten Infrastruktur-Dienste technische Protokolle, etwa IP-Adresse, Zeitstempel, angeforderten Endpunkt, Status und Fehlerangaben. Das dient der Fehlerbehebung und der Abwehr von Missbrauch (Art. 6 Abs. 1 lit. f DSGVO). Protokolle werden nicht für verhaltensbezogene Werbung eingesetzt. Ihre Aufbewahrung richtet sich nach dem erforderlichen Betriebs- und Sicherheitszweck und den Konfigurationen der Anbieter; eine einheitliche, verifizierte Höchstfrist von 30 Tagen für sämtliche Protokolle besteht nicht.</p>
 
-<h2>5. Eingesetzte Drittanbieter (Auftragsverarbeiter)</h2>
+<h2>9. Aufbewahrung und Löschung</h2>
+<p>Kontodaten und gespeicherte Inhalte werden grundsätzlich für die Dauer der Nutzung vorgehalten, soweit Sie sie nicht zuvor löschen und keine andere Rechtsgrundlage eine weitere Aufbewahrung erfordert. Support- und Vertragsnachweise werden nur so lange aufbewahrt, wie die Bearbeitung, gesetzliche Pflichten oder erforderliche Anspruchssicherung es verlangen. Gesetzlich aufzubewahrende eigene Abrechnungsunterlagen werden nach Ablauf der jeweils einschlägigen Frist gelöscht. Ihre steuerlichen Aufbewahrungspflichten erfüllen Sie als Vermieter selbst; der Dienst ist kein zugesagtes revisionssicheres Langzeitarchiv.</p>
+<p>Sie können eine Kontolöschung über die angebotene Kontofunktion oder per E-Mail anfordern. Der automatische Ablauf ist derzeit <strong>nicht als vollständige Löschung sämtlicher Datenbereiche und Dienstleisterverknüpfungen nachgewiesen</strong>. Insbesondere Dokumente in unterschiedlichen Speicherbereichen, abhängige Datensätze, lokale Kopien und RevenueCat erfordern eine gesonderte Prüfung. Wir prüfen Löschanfragen daher zusätzlich anhand der betroffenen Systeme. Eine Kontolöschung oder Abmeldung allein ist keine Bestätigung, dass jede Kopie bereits entfernt ist. Eine feste pauschale Erledigungsfrist von 30 Tagen wird nicht zugesagt; für Ihre Datenschutzanfrage gelten die gesetzlichen Antwortfristen.</p>
+<p>Bei einer gesetzlichen Aufbewahrungspflicht oder erforderlichen Rechtsverteidigung werden die betreffenden Daten nur für diesen Zweck weiter gespeichert und im Übrigen eingeschränkt. Technische Sicherungskopien und Daten bei selbst verantwortlichen Empfängern können anderen Löschzyklen unterliegen. Wir informieren Sie bei einer Anfrage über verbleibende Daten und die dafür maßgeblichen Gründe. Bitte sichern Sie vor einer Kontolöschung benötigte Unterlagen; eine Wiederherstellung wird nicht zugesagt. Ein bloßes Archivieren oder Ausblenden ist keine endgültige Löschung.</p>
 
-<h3>5.1 Supabase Inc. &ndash; Datenspeicherung und Authentifizierung</h3>
-<table>
-    <tr><th>Anbieter</th><td>Supabase Inc., 970 Toa Payoh North #07-04, Singapore 318992</td></tr>
-    <tr><th>Funktion</th><td>Bereitstellung von Datenbank (PostgreSQL), Authentifizierungs- und Speicher-Services, Edge Functions</td></tr>
-    <tr><th>Speicherort</th><td>AWS eu-west-1 (Irland, EU)</td></tr>
-    <tr><th>Datenübertragung</th><td>verschlüsselt (TLS 1.2+)</td></tr>
-    <tr><th>Rechtsgrundlage</th><td>Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung), Art. 28 DSGVO (Auftragsverarbeitungsvertrag abgeschlossen)</td></tr>
-</table>
+<h2>10. Datensicherheit und aktueller Prüfstand</h2>
+<p>Der Dienst nutzt verschlüsselte HTTPS-Verbindungen und Supabase-Authentifizierung; Zugriffsregeln sollen die Berechtigung an Konto und Inhalt knüpfen. Diese Maßnahmen ersetzen keine Prüfung der tatsächlich eingesetzten Konfiguration.</p>
+<p><strong>Offener Sicherheitsbefund:</strong> Eine lesende Konfigurationsprüfung vom 30. Oktober 2026 bestätigte öffentlich abrufbare Dokument-/Bildspeicher sowie zu weit gefasste Dateizugriffsregeln. Bei öffentlichen Dateien können Personen mit Kenntnis der URL ohne Anmeldung zugreifen. Diese Konfiguration ist noch nicht behoben; eine ausschließlich kontobezogene Abschottung aller Speicherbereiche besteht damit nicht. Ein tatsächlicher Fremdzugriff wurde damit nicht nachgewiesen. Bis zur bestätigten Behebung können wir keinen ausschließlich auf den jeweiligen Kontoinhaber begrenzten Dateizugriff zusagen. Bitte laden Sie bis dahin keine weiteren vertraulichen personenbezogenen Unterlagen hoch und wenden Sie sich bei bereits gespeicherten sensiblen Daten an uns.</p>
 
-<h3>5.2 Anthropic PBC &ndash; KI-Verarbeitung (Claude API)</h3>
-<table>
-    <tr><th>Anbieter</th><td>Anthropic PBC, 548 Market St PMB 90375, San Francisco, CA 94104, USA</td></tr>
-    <tr><th>Funktion</th><td>Verarbeitung von Belegbildern und PDF-Seiten (OCR-Extraktion), Texteingaben im KI-Assistenten sowie Dokumenten-Kontext im Dokumenten-Chat mittels Claude Haiku</td></tr>
-    <tr><th>Speicherort</th><td>USA (Verarbeitung ist transient, keine dauerhafte Speicherung durch Anthropic)</td></tr>
-    <tr><th>Datenübertragung</th><td>verschlüsselt (TLS 1.2+), API-Zugriff</td></tr>
-    <tr><th>Rechtsgrundlage</th><td>Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung), Art. 49 Abs. 1 lit. b DSGVO bzw. Standardvertragsklauseln gemäß Art. 46 Abs. 2 lit. c DSGVO</td></tr>
-</table>
-<p><strong>Wichtiger Hinweis zur KI-Verarbeitung:</strong> Vor der ersten Nutzung einer KI-Funktion fragt die App ausdrücklich nach Ihrer Zustimmung und erklärt, welche Daten gesendet werden, an wen sie gesendet werden und zu welchem Zweck. Je nach Funktion können Belegbilder, PDF-Seiten, Dokumentnamen, Dokumentdateien bzw. Dokument-URLs, Chatnachrichten, Objekte, Adressen, Mieter, Verträge, Buchungen, Fahrtkosten, Beträge und Kategorien an unsere Supabase Edge Function und anschließend über die Claude-API an Anthropic übermittelt werden. Anthropic verarbeitet diese Inhalte ausschließlich zur Bereitstellung der angeforderten KI-Antwort und gibt das Ergebnis an die App zurück.</p>
-<p>Anthropic speichert diese Inhalte gemäß den vertraglichen Vereinbarungen für API-Kunden <strong>nicht dauerhaft</strong> und verwendet sie <strong>nicht zum Trainieren</strong> der KI-Modelle. Übertragene Inhalte können von Anthropic für eine begrenzte Zeit (bis zu 30 Tage) zu Missbrauchserkennungszwecken vorgehalten werden, bevor sie automatisch gelöscht werden. Wir haben mit den eingesetzten Dienstleistern vertragliche Datenschutz- und Sicherheitsanforderungen vereinbart, die ein angemessenes und vergleichbares Schutzniveau für die übermittelten Daten sicherstellen.</p>
-<p>Sie können die KI-Funktionen jederzeit ungenutzt lassen. Buchungen, Dokumente und weitere Inhalte können vollständig manuell erfasst oder verwaltet werden, ohne dass eine Datenübertragung an Anthropic stattfindet.</p>
+<h2>11. Ihre Rechte</h2>
+<p>Unter den gesetzlichen Voraussetzungen haben Sie Rechte auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18) und Datenübertragbarkeit (Art. 20). Eine Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen; die Rechtmäßigkeit der früheren Verarbeitung bleibt unberührt. Sie können sich bei einer Datenschutzaufsichtsbehörde beschweren (Art. 77), insbesondere am Ort Ihres Aufenthalts, Arbeitsplatzes oder des vermuteten Verstoßes. Für unseren Sitz ist der <a href="https://datenschutz.hessen.de/">Hessische Beauftragte für Datenschutz und Informationsfreiheit</a> zuständig.</p>
+<p><strong>Widerspruch:</strong> Soweit wir auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO verarbeiten, können Sie aus Gründen Ihrer besonderen Situation widersprechen (Art. 21 Abs. 1 DSGVO). Wir beenden die Verarbeitung, sofern keine zwingenden überwiegenden schutzwürdigen Gründe oder eine erforderliche Rechtsverfolgung entgegenstehen.</p>
+<p>Schreiben Sie an <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a>. Wir beantworten Anträge grundsätzlich innerhalb eines Monats; eine gesetzlich zulässige Verlängerung teilen wir begründet mit. Geht es um Mieterdaten, die ein Kunde in eigener Verantwortung verwaltet, unterstützen wir den zuständigen Verantwortlichen bei der Bearbeitung und leiten Anfragen erforderlichenfalls weiter.</p>
 
-<h3>5.3 RevenueCat Inc. &ndash; Abonnementverwaltung</h3>
-<table>
-    <tr><th>Anbieter</th><td>RevenueCat Inc., 75 Broadway, Suite 202, San Francisco, CA 94111, USA</td></tr>
-    <tr><th>Funktion</th><td>Verwaltung und Validierung von In-App-Abonnements, Bereitstellung der Berechtigungslogik</td></tr>
-    <tr><th>Verarbeitete Daten</th><td>anonymisierte App-User-ID, Apple-Kaufquittung, Abostatus</td></tr>
-    <tr><th>Rechtsgrundlage</th><td>Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung), Standardvertragsklauseln nach Art. 46 DSGVO</td></tr>
-</table>
-
-<h3>5.4 Apple Inc. &ndash; Zahlungsabwicklung und App-Bereitstellung</h3>
-<table>
-    <tr><th>Anbieter</th><td>Apple Distribution International Ltd., Hollyhill Industrial Estate, Hollyhill, Cork, Irland</td></tr>
-    <tr><th>Funktion</th><td>App-Bereitstellung über den App Store, Abwicklung von In-App-Käufen und Abonnements, „Sign in with Apple“</td></tr>
-    <tr><th>Verarbeitete Daten</th><td>Apple-ID, Zahlungsdaten, Rechnungsadresse (verarbeitet ausschließlich durch Apple)</td></tr>
-    <tr><th>Rechtsgrundlage</th><td>Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)</td></tr>
-</table>
-<p>Für die Datenverarbeitung durch Apple gelten ergänzend die Datenschutzbestimmungen von Apple: <a href="https://www.apple.com/legal/privacy/de-ww/">apple.com/legal/privacy/de-ww/</a></p>
-
-<h2>6. Zugriff auf Gerätedaten (iOS-Berechtigungen)</h2>
-<p>Die App fragt nur dann Berechtigungen ab, wenn diese für eine konkrete Funktion benötigt werden:</p>
-<ul>
-    <li><strong>Kamera:</strong> Aufnahme von Belegen für den KI-Beleg-Scan</li>
-    <li><strong>Fotomediathek:</strong> Auswahl bereits vorhandener Belegbilder</li>
-    <li><strong>Standort (nur bei Bedarf, optional):</strong> automatische Erkennung von Start- und Zielort für Fahrtkostenaufzeichnungen</li>
-    <li><strong>Dateien:</strong> Import von Mietverträgen oder PDF-Belegen</li>
-</ul>
-<p>Sie können jede einzelne Berechtigung in den iOS-Systemeinstellungen jederzeit widerrufen.</p>
-
-<h2>7. Aufbewahrungsfristen</h2>
-<p>Wir bewahren Ihre personenbezogenen Daten nur so lange auf, wie es für die jeweiligen Zwecke erforderlich ist oder gesetzliche Aufbewahrungspflichten dies vorschreiben.</p>
-<ul>
-    <li><strong>Kontodaten und steuerlich relevante Daten:</strong> Solange Ihr Konto aktiv ist. Sie als Nutzer sind allein verantwortlich für die Einhaltung steuerlicher Aufbewahrungsfristen nach §147 AO (in der Regel 10 Jahre für Buchungsbelege).</li>
-    <li><strong>Belege und Buchungen:</strong> Bis zur manuellen Löschung durch Sie oder zur vollständigen Kontolöschung.</li>
-    <li><strong>Logdaten:</strong> Maximal 30 Tage, danach automatische Löschung bzw. Anonymisierung.</li>
-    <li><strong>Daten bei Anthropic:</strong> Maximal 30 Tage zur Missbrauchserkennung, anschließend automatische Löschung.</li>
-    <li><strong>Daten nach Kontolöschung:</strong> Vollständige Löschung innerhalb von 30 Tagen über eine serverseitige Edge Function (siehe Abschnitt 9).</li>
-</ul>
-
-<h2>8. Ihre Rechte als betroffene Person</h2>
-<p>Ihnen stehen gegenüber uns als Verantwortlichem die folgenden Rechte hinsichtlich der Sie betreffenden personenbezogenen Daten zu:</p>
-<ul>
-    <li><strong>Recht auf Auskunft</strong> (Art. 15 DSGVO)</li>
-    <li><strong>Recht auf Berichtigung</strong> unrichtiger Daten (Art. 16 DSGVO)</li>
-    <li><strong>Recht auf Löschung</strong> („Recht auf Vergessenwerden“, Art. 17 DSGVO)</li>
-    <li><strong>Recht auf Einschränkung der Verarbeitung</strong> (Art. 18 DSGVO)</li>
-    <li><strong>Recht auf Datenübertragbarkeit</strong> (Art. 20 DSGVO)</li>
-    <li><strong>Widerspruchsrecht</strong> gegen die Verarbeitung (Art. 21 DSGVO)</li>
-    <li><strong>Recht auf Widerruf</strong> einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)</li>
-    <li><strong>Recht auf Beschwerde</strong> bei einer Aufsichtsbehörde (Art. 77 DSGVO), in Deutschland in der Regel die Datenschutzbehörde Ihres Bundeslandes</li>
-</ul>
-<p>Zur Ausübung Ihrer Rechte genügt eine formlose E-Mail an <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a>.</p>
-
-<h2>9. Konto-Löschung</h2>
-<p>Sie können Ihr Nutzerkonto jederzeit selbst dauerhaft löschen. Öffnen Sie hierzu in der App den Bereich <em>Einstellungen → Konto → Konto löschen</em>. Nach Bestätigung wird eine serverseitige Edge Function ausgeführt, die folgende Daten <strong>endgültig und unwiderruflich</strong> entfernt:</p>
-<ul>
-    <li>Authentifizierungsdaten (E-Mail, Passwort-Hash, Apple-Token)</li>
-    <li>Alle Immobilien-, Buchungs-, AfA-, Fahrtkosten- und Nebenkostendaten</li>
-    <li>Alle hochgeladenen Belege und Vertragsdokumente</li>
-    <li>Alle Mieter- und Vertragsdatensätze</li>
-    <li>Abo-Verknüpfungen bei RevenueCat (bestehende Apple-Abonnements müssen Sie zusätzlich in den iOS-Systemeinstellungen kündigen)</li>
-</ul>
-<p>Eine Wiederherstellung der Daten nach Kontolöschung ist nicht möglich. Bitte exportieren Sie ggf. zuvor Ihre Steuerdaten.</p>
-
-<h2>10. Datensicherheit</h2>
-<p>Wir setzen technische und organisatorische Sicherheitsmaßnahmen ein, um Ihre Daten gegen zufällige oder vorsätzliche Manipulationen, Verlust, Zerstörung oder den Zugriff unberechtigter Personen zu schützen. Dies umfasst insbesondere:</p>
-<ul>
-    <li>Transportverschlüsselung über TLS 1.2 oder höher</li>
-    <li>Row-Level-Security in der Supabase-Datenbank (jeder Nutzer kann ausschließlich seine eigenen Daten lesen und schreiben)</li>
-    <li>Verschlüsselung aller Belege und Dokumente im Storage</li>
-    <li>Strikte Trennung von API-Schlüsseln und Nutzerdaten</li>
-    <li>Regelmäßige Sicherheitsaktualisierungen unserer Infrastruktur</li>
-</ul>
-
-<h2>11. Keine Nutzung für Werbung oder Profiling</h2>
-<p>Wir verwenden Ihre Daten ausschließlich zur Bereitstellung der App-Funktionen. Wir betreiben <strong>keinerlei Werbung</strong>, <strong>kein Profiling</strong> und <strong>keine automatisierte Entscheidungsfindung</strong> im Sinne von Art. 22 DSGVO. Wir verkaufen Ihre Daten nicht an Dritte.</p>
-
-<h2>12. Minderjährige</h2>
-<p>Unsere App richtet sich ausschließlich an volljährige Personen. Personen unter 18 Jahren dürfen die App nicht ohne Zustimmung eines Erziehungsberechtigten nutzen. Wir verarbeiten wissentlich keine Daten von Kindern.</p>
-
-<h2>13. Änderungen dieser Datenschutzerklärung</h2>
-<p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, damit sie stets den aktuellen rechtlichen Anforderungen entspricht oder Änderungen unserer Leistungen umgesetzt werden können. Die jeweils aktuelle Fassung finden Sie stets auf <a href="https://eypassiai.com/privacy">eypassiai.com/privacy</a>.</p>
-
-<h2>14. Kontakt</h2>
-<p>Bei Fragen zur Erhebung, Verarbeitung oder Nutzung Ihrer personenbezogenen Daten, bei Auskünften, Berichtigung, Sperrung oder Löschung von Daten sowie Widerruf erteilter Einwilligungen wenden Sie sich bitte an:</p>
-<p>
-    Pascal Weber<br>
-    Babenhäuser Str. 15<br>
-    64859 Eppertshausen<br>
-    E-Mail: <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a>
-</p>
-
+<h2>12. Aktualisierung dieser Informationen</h2>
+<p>Bei Änderungen der Verarbeitung aktualisieren wir diese Erklärung und informieren Sie, soweit erforderlich, zusätzlich. Eine Veröffentlichung ersetzt keine notwendige Einwilligung, Vertragsvereinbarung oder technische Sicherheitsmaßnahme. Der Dienst richtet sich an volljährige Nutzer.</p>
+</main>
 <hr>
-<p class="meta">© 2026 eypassiai &middot; Pascal Weber. Alle Rechte vorbehalten.</p>
-
+<footer><p class="meta">© 2026 eypassiai · Pascal Weber · <a href="/impressum.html">Impressum</a> · <a href="/terms.html">AGB</a> · <a href="/avv.html">Auftragsverarbeitung</a></p></footer>
 </body>
 </html>

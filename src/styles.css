@@ -1479,6 +1479,29 @@ pre {
   text-transform: uppercase;
 }
 
+.file-privacy-notice {
+  padding: 14px 16px;
+  border: 1px solid #7d6335;
+  border-radius: 12px;
+  background: #30291c;
+  color: #f5e7cb;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.file-privacy-notice p,
+.auth-hero .file-privacy-notice p {
+  margin: 6px 0 0;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.file-privacy-notice a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .auth-shell {
   min-height: 100vh;
   display: grid;

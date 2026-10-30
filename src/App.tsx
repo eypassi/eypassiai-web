@@ -887,6 +887,15 @@ function Splash() {
   );
 }
 
+function FilePrivacyNotice() {
+  return (
+    <aside className="file-privacy-notice" aria-label="Hinweis zum Dateidatenschutz">
+      <strong>Hinweis zum Dateidatenschutz</strong>
+      <p>Der Dateizugriff ist derzeit nicht in allen Bereichen auf dein Konto begrenzt. Bitte lade bis zur Behebung keine vertraulichen Unterlagen oder Bilder hoch. <a href="/privacy.html" target="_blank" rel="noreferrer">Aktueller Prüfstand</a></p>
+    </aside>
+  );
+}
+
 function AuthScreen() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
@@ -939,6 +948,7 @@ function AuthScreen() {
         <p className="kicker">Browser-Version</p>
         <h1>eypassiai</h1>
         <p>Dieselbe Immobilienverwaltung, dieselben Supabase-User und dieselben Daten wie in deiner iOS-App.</p>
+        <FilePrivacyNotice />
       </section>
       <form className="auth-card" onSubmit={submit}>
         <div>
@@ -1128,6 +1138,7 @@ function Workspace({ session, user }: { session: Session; user: User }) {
             <button onClick={signOut}>Abmelden</button>
           </div>
         </header>
+        <FilePrivacyNotice />
         {error && <div className="alert error">{error}</div>}
         {loading ? <div className="panel">Daten werden geladen...</div> : content[view]}
       </main>

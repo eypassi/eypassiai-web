@@ -557,7 +557,7 @@ function LandingPage() {
   const faqs: [string, string][] = [
     ["Für wen ist eypassiai?", "Für private Vermieter in Deutschland mit ein bis zehn Immobilien — die Buchungen, Belege und die Steuervorbereitung ohne komplizierte Buchhaltungssoftware organisieren wollen."],
     ["Gibt es eine iPhone-App?", "Ja. Die native iOS-App steht im Apple App Store und synchronisiert sich über dasselbe Konto mit der Web-App."],
-    ["Wie sicher sind meine Daten?", "Der Datenspeicher liegt in Frankfurt. Die Prüfung vom 30.10.2026 hat jedoch offene Mängel beim Dateizugriff bestätigt. Lade bis zur bestätigten Behebung keine weiteren vertraulichen personenbezogenen Unterlagen hoch. Details zu den Risiken und internationalen Dienstleistern stehen in der Datenschutzerklärung."],
+    ["Wie sicher sind meine Daten?", "Der Datenspeicher liegt in Frankfurt. Nach festgestellten Zugriffsmängeln wurden die Dateibereiche privat konfiguriert und zusätzliche Zugriffsbeschränkungen eingerichtet. Weitere Sicherheitsprüfungen stehen aus; Dateifunktionen sind vorübergehend eingeschränkt. Lade derzeit keine Dateien hoch und lösche keine gespeicherten Unterlagen. Den aktuellen Stand findest du in der Datenschutzerklärung."],
     ["Was beinhaltet der kostenlose Plan?", "Du kannst Objekte anlegen, das Interface kennenlernen und dein Profil einrichten — ohne Abo und ohne Kreditkarte. Buchungen und Belege sind Teil der bezahlten Pläne."],
     ["Kann ich jederzeit kündigen?", "Apple-Abos kannst du zum Ende des Abrechnungszeitraums kündigen. Die deutschen Apple-Bedingungen sehen außerdem eine sofortige Kündigung mit anteiliger Erstattung über Apple Support vor. Eine Kontolöschung allein kündigt das Apple-Abo nicht."],
     ["Brauche ich Buchhaltungskenntnisse?", "Nein. Die App führt dich Schritt für Schritt. Die Steuer-Hilfefunktionen strukturieren deine Daten — ersetzen aber keine Steuerberatung."],
@@ -891,7 +891,7 @@ function FilePrivacyNotice() {
   return (
     <aside className="file-privacy-notice" aria-label="Hinweis zum Dateidatenschutz">
       <strong>Hinweis zum Dateidatenschutz</strong>
-      <p>Der Dateizugriff ist derzeit nicht in allen Bereichen auf dein Konto begrenzt. Bitte lade bis zur Behebung keine vertraulichen Unterlagen oder Bilder hoch. <a href="/privacy.html" target="_blank" rel="noreferrer">Aktueller Prüfstand</a></p>
+      <p>Die Dateifunktionen sind derzeit eingeschränkt. Die Dateispeicher wurden privat konfiguriert und zusätzliche Zugriffsbeschränkungen eingerichtet. Die Absicherung bestehender Dateilinks und die vollständige Prüfung sind noch nicht abgeschlossen. Bitte lade keine Dateien hoch und lösche keine gespeicherten Unterlagen. <a href="/privacy.html" target="_blank" rel="noreferrer">Aktueller Prüfstand</a></p>
     </aside>
   );
 }

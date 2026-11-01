@@ -415,9 +415,9 @@ function Splash() {
 
 function FilePrivacyNotice() {
   return (
-    <aside className="file-privacy-notice" aria-label="Hinweis zum Dateidatenschutz">
-      <strong>Hinweis zum Dateidatenschutz</strong>
-      <p>Die Dateifunktionen sind derzeit eingeschränkt. Die Dateispeicher wurden privat konfiguriert und zusätzliche Zugriffsbeschränkungen eingerichtet. Die Absicherung bestehender Dateilinks und die vollständige Prüfung sind noch nicht abgeschlossen. Bitte lade keine Dateien hoch und lösche keine gespeicherten Unterlagen. <a href="/privacy.html" target="_blank" rel="noreferrer">Aktueller Prüfstand</a></p>
+    <aside className="file-privacy-notice" aria-label="Hinweis zu Dateifunktionen">
+      <strong>Hinweis zu Dateifunktionen</strong>
+      <p>Die Dateifunktionen sind derzeit eingeschränkt und werden weiter geprüft. Bitte lade keine Dateien hoch und lösche keine gespeicherten Unterlagen. <a href="/privacy.html" target="_blank" rel="noreferrer">Hinweise zu Dateifunktionen</a></p>
     </aside>
   );
 }

@@ -330,9 +330,9 @@ export default function LandingPage() {
         <div className="steps-grid">
           {(
             [
-              ["01", "Objekt anlegen", "Adresse, Einheiten und Rahmendaten erfassen. Fotos optional direkt hochladen."],
+              ["01", "Objekt anlegen", "Adresse, Einheiten und Rahmendaten erfassen. Datei-Uploads sind derzeit pausiert."],
               ["02", "Mieter verbinden", "Mieter anlegen, Vertrag erstellen, Mietbeginn und monatliche Miete hinterlegen."],
-              ["03", "Belege sammeln", "Foto hochladen, Kategorie prüfen, Betrag bestätigen und der Buchung zuordnen."],
+              ["03", "Buchungen ordnen", "Betrag und Kategorie erfassen und dem passenden Objekt zuordnen. Dateifunktionen sind derzeit eingeschränkt."],
               ["04", "Auswerten", "Jahreszahlen, Kostenblöcke und Anlage-V-Reports jederzeit abrufen oder exportieren."],
             ] as const
           ).map(([n, title, text]) => (

@@ -4,12 +4,24 @@ import { publicObjectUrl, supabase, supabaseAnonKey, supabaseUrl } from "./supab
 import { AI_CONSENT_VERSION, createAiConsentStore } from "./ai-consent";
 import { buildAgentContext } from "./ai-context";
 import { createApprovedAiInvoker } from "./ai-invoke";
+import { createAiProposalApplier } from "./ai-proposal";
+import { deleteDocumentSafely, FILE_HOLD_MESSAGE, FILE_MUTATIONS_HELD, fileMutationBlocked } from "./file-operations";
+import { createPasswordRecovery, createRecoveryPasswordUpdater } from "./password-recovery";
 
 const invokeApprovedAi = createApprovedAiInvoker({
   getSession: () => supabase.auth.getSession(),
   supabaseUrl,
   supabaseAnonKey,
 });
+
+const applyAiProposal = createAiProposalApplier({ getSession: () => supabase.auth.getSession(), supabaseUrl, supabaseAnonKey });
+const passwordRecovery = createPasswordRecovery({
+  getSession: () => supabase.auth.getSession(),
+  updateUser: createRecoveryPasswordUpdater({ supabaseUrl, supabaseAnonKey }),
+});
+// Subscribe before React mounts: an immediately resolved callback must survive
+// lazy-module loading and the first effect registration.
+supabase.auth.onAuthStateChange((event, session) => passwordRecovery.handleAuth(event, session));
 
 const aiConsent = createAiConsentStore({
   getItem: key => window.localStorage.getItem(key),
@@ -309,6 +321,7 @@ function fileExtension(file: File) {
 }
 
 async function uploadPublicImage(bucket: string, path: string, file: File) {
+  if (FILE_MUTATIONS_HELD) throw new Error(FILE_HOLD_MESSAGE);
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
     contentType: file.type || "image/jpeg",
     upsert: false,
@@ -368,6 +381,7 @@ function useAiConsent(accountId: string) {
 export default function AppRuntime() {
   const [session, setSession] = useState<Session | null>(null);
   const [loadingSession, setLoadingSession] = useState(true);
+  const recovery = useSyncExternalStore(passwordRecovery.subscribe, passwordRecovery.getSnapshot, passwordRecovery.getSnapshot);
 
   useEffect(() => {
     let mounted = true;
@@ -378,7 +392,7 @@ export default function AppRuntime() {
       setSession(data.session);
       setLoadingSession(false);
     });
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    const { data } = supabase.auth.onAuthStateChange((event, nextSession) => {
       if (!mounted) return;
       authEventReceived = true;
       aiConsent.activateAccount(nextSession?.user.id ?? null);
@@ -389,6 +403,7 @@ export default function AppRuntime() {
       mounted = false;
       data.subscription.unsubscribe();
       aiConsent.invalidateRequests();
+      passwordRecovery.invalidateForTeardown();
     };
   }, []);
 
@@ -400,8 +415,29 @@ export default function AppRuntime() {
     return <AuthScreen />;
   }
 
+  if (recovery.accountId === session.user.id) return <PasswordRecoveryScreen />;
+
   // Remount every view on account changes: forms, files, results and loaded records belong to one account.
   return <Workspace key={session.user.id} session={session} user={session.user} />;
+}
+
+function PasswordRecoveryScreen() {
+  const recovery = useSyncExternalStore(passwordRecovery.subscribe, passwordRecovery.getSnapshot, passwordRecovery.getSnapshot);
+  return (
+    <main className="auth-shell">
+      <section className="auth-hero"><p className="kicker">Passwort wiederherstellen</p><h1>Neues Passwort festlegen</h1><p>Wähle ein neues Passwort für das Konto aus deinem Wiederherstellungslink.</p></section>
+      <form className="auth-card" onSubmit={event => { event.preventDefault(); void passwordRecovery.submit(); }}>
+        {recovery.complete ? <><p className="alert success" role="status">Dein Passwort wurde geändert.</p><button className="primary" type="button" onClick={passwordRecovery.cancel}>Zur Web-App</button></> : <>
+          <label>Neues Passwort<input type="password" autoComplete="new-password" minLength={8} maxLength={1024} required disabled={recovery.busy} value={recovery.password} onChange={event => passwordRecovery.setPassword(event.target.value)} /></label>
+          <label>Passwort bestätigen<input type="password" autoComplete="new-password" minLength={8} maxLength={1024} required disabled={recovery.busy} value={recovery.confirmation} onChange={event => passwordRecovery.setConfirmation(event.target.value)} /></label>
+          <p className="fineprint">Mindestens 8 Zeichen. Beide Eingaben müssen übereinstimmen.</p>
+          {recovery.error && <p className="alert error" role="alert">{recovery.error}</p>}
+          <button className="primary" disabled={recovery.busy}>{recovery.busy ? "Passwort wird geändert..." : "Passwort speichern"}</button>
+        </>}
+        <LegalLinks />
+      </form>
+    </main>
+  );
 }
 
 function Splash() {
@@ -745,6 +781,7 @@ function PropertiesView({ data, user, refresh }: CrudProps) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const image = form.get("image") as File | null;
+    if (image && image.size > 0 && fileMutationBlocked(alert)) return;
     const { data: inserted, error } = await supabase.from("properties").insert({
       user_id: user.id,
       address: textValue(form.get("address")),
@@ -783,7 +820,7 @@ function PropertiesView({ data, user, refresh }: CrudProps) {
             title={property.address}
             meta={property.type}
             mediaUrls={propertyMedia(data, property)}
-            onDelete={() => remove("properties", property.id, refresh)}
+            onDelete={() => remove("properties", property.id, refresh, propertyMedia(data, property).length > 0 || data.documents.some(doc => doc.property_id === property.id))}
           >
             <p>Kaufpreis: {eur(property.purchase_price)}</p>
             <p>Kaufdatum: {property.purchase_date ?? "–"}</p>
@@ -805,7 +842,7 @@ function PropertyForm({ onSubmit }: { onSubmit: (event: React.FormEvent<HTMLForm
       </select>
       <input name="purchase_price" placeholder="Kaufpreis" inputMode="decimal" />
       <input name="purchase_date" type="date" />
-      <input name="image" type="file" accept="image/*" />
+      <input name="image" type="file" accept="image/*" disabled={FILE_MUTATIONS_HELD} />
       <button className="primary">Objekt anlegen</button>
     </form>
   );
@@ -822,6 +859,7 @@ function UnitsView({ data, user, refresh }: CrudProps) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const image = form.get("image") as File | null;
+    if (image && image.size > 0 && fileMutationBlocked(alert)) return;
     const { data: inserted, error } = await supabase.from("units").insert({
       user_id: user.id,
       property_id: String(form.get("property_id")),
@@ -859,7 +897,7 @@ function UnitsView({ data, user, refresh }: CrudProps) {
             title={unit.name}
             meta={propertyName(data, unit.property_id)}
             mediaUrls={unitMedia(data, unit)}
-            onDelete={() => remove("units", unit.id, refresh)}
+            onDelete={() => remove("units", unit.id, refresh, unitMedia(data, unit).length > 0)}
           >
             <p>{unit.sqm ?? "–"} m²</p>
             <p>{usageLabel(unit.usage_type)}</p>
@@ -889,7 +927,7 @@ function UnitForm({ data, onSubmit }: { data: DataState; onSubmit: (event: React
         <option value="mixed">Gemischt</option>
         <option value="parking">Stellplatz</option>
       </select>
-      <input name="image" type="file" accept="image/*" />
+      <input name="image" type="file" accept="image/*" disabled={FILE_MUTATIONS_HELD} />
       <button className="primary">Einheit anlegen</button>
     </form>
   );
@@ -900,6 +938,7 @@ function TenantsView({ data, user, refresh }: CrudProps) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const image = form.get("image") as File | null;
+    if (image && image.size > 0 && fileMutationBlocked(alert)) return;
     const { data: inserted, error } = await supabase.from("tenants").insert({
       user_id: user.id,
       property_id: String(form.get("property_id")),
@@ -930,7 +969,7 @@ function TenantsView({ data, user, refresh }: CrudProps) {
             title={tenant.name}
             meta={propertyName(data, tenant.property_id)}
             mediaUrls={tenant.profile_image_url ? [tenant.profile_image_url] : []}
-            onDelete={() => remove("tenants", tenant.id, refresh)}
+            onDelete={() => remove("tenants", tenant.id, refresh, Boolean(tenant.profile_image_url) || data.documents.some(doc => doc.tenant_id === tenant.id))}
           >
             <p>{tenant.email ?? "Keine E-Mail"}</p>
             <p>{tenant.phone ?? "Keine Telefonnummer"}</p>
@@ -956,7 +995,7 @@ function TenantForm({ data, onSubmit }: { data: DataState; onSubmit: (event: Rea
       <input name="email" placeholder="E-Mail optional" type="email" />
       <input name="phone" placeholder="Telefon optional" />
       <input name="sqm" placeholder="m² optional" inputMode="decimal" />
-      <input name="image" type="file" accept="image/*" />
+      <input name="image" type="file" accept="image/*" disabled={FILE_MUTATIONS_HELD} />
       <button className="primary">Mieter anlegen</button>
     </form>
   );
@@ -1135,6 +1174,7 @@ function ReceiptsView({ data, user, refresh, session }: CrudProps & { session: S
   }, [receiptTransactions.map((tx) => `${tx.id}:${tx.receipt_url}`).join("|")]);
 
   async function scan() {
+    if (fileMutationBlocked(alert)) return;
     if (!scanFiles?.length) return;
     const approval = requestApproval();
     if (!approval) return;
@@ -1160,6 +1200,7 @@ function ReceiptsView({ data, user, refresh, session }: CrudProps & { session: S
   async function createFromScan() {
     if (!scanResult || !aiConsent.isApproved(user.id)) return;
     const file = scanFiles?.[0];
+    if (file && fileMutationBlocked(alert)) return;
     let receiptUrl: string | null = null;
     if (file) {
       const path = `${user.id}/${crypto.randomUUID()}-${file.name}`;
@@ -1206,8 +1247,8 @@ function ReceiptsView({ data, user, refresh, session }: CrudProps & { session: S
           <AiConsent onAccept={grant} />
         ) : (
           <div className="form-grid">
-            <input type="file" accept="image/*" multiple onChange={(event) => setScanFiles(event.currentTarget.files)} />
-            <button className="primary" onClick={scan} disabled={!scanFiles?.length || scanning}>
+            <input type="file" accept="image/*" multiple disabled={FILE_MUTATIONS_HELD} onChange={(event) => setScanFiles(event.currentTarget.files)} />
+            <button className="primary" onClick={scan} disabled={FILE_MUTATIONS_HELD || !scanFiles?.length || scanning}>
               {scanning ? "Scan läuft..." : "Mit KI scannen"}
             </button>
           </div>
@@ -1267,6 +1308,7 @@ function DocumentsView({ data, user, refresh }: CrudProps) {
     const form = new FormData(event.currentTarget);
     const file = form.get("file") as File | null;
     if (!file || file.size === 0) return;
+    if (fileMutationBlocked(alert)) return;
     const ext = file.type.includes("pdf") ? "pdf" : "jpg";
     const path = `${user.id}/documents/${crypto.randomUUID()}.${ext}`;
     const { error } = await supabase.storage.from("documents").upload(path, file, {
@@ -1376,8 +1418,9 @@ function DocumentForm({ data, onSubmit }: { data: DataState; onSubmit: (event: R
           <option key={tenant.id} value={tenant.id}>{tenant.name}</option>
         ))}
       </select>
-      <input name="file" type="file" required />
-      <button className="primary">Dokument hochladen</button>
+      <input name="file" type="file" required disabled={FILE_MUTATIONS_HELD} />
+      <button className="primary" disabled={FILE_MUTATIONS_HELD}>Dokument hochladen</button>
+      {FILE_MUTATIONS_HELD && <p className="fineprint">{FILE_HOLD_MESSAGE}</p>}
     </form>
   );
 }
@@ -1565,11 +1608,13 @@ function AgentView({ data, user, refresh }: CrudProps) {
   const [command, setCommand] = useState("");
   const [result, setResult] = useState<{ action_type: string; data: Record<string, unknown> } | null>(null);
   const [busy, setBusy] = useState(false);
+  const [applyError, setApplyError] = useState<string | null>(null);
   const { consented, consentState, consentError, grant, requestApproval } = useAiConsent(user.id);
   useEffect(() => {
     if (!consented) setCommand("");
     setResult(null);
     setBusy(false);
+    setApplyError(null);
   }, [consentState]);
 
   async function send() {
@@ -1596,21 +1641,17 @@ function AgentView({ data, user, refresh }: CrudProps) {
   }
 
   async function applyResult() {
-    if (!result || !aiConsent.isApproved(user.id)) return;
-    if (result.action_type === "create_transaction") {
-      await supabase.from("transactions").insert({
-        user_id: user.id,
-        ...result.data,
-        is_verified: false,
-        import_source: "web_agent",
-      });
-    }
-    if (result.action_type === "create_travel_expense") {
-      await supabase.from("travel_expenses").insert({ user_id: user.id, ...result.data });
-    }
-    setResult(null);
-    setCommand("");
-    refresh();
+    if (!result || busy) return;
+    const approval = requestApproval();
+    if (!approval) { setApplyError("Bitte erteile die KI-Freigabe vor der Übernahme erneut."); return; }
+    setBusy(true);
+    setApplyError(null);
+    try {
+      const applied = await applyAiProposal(user.id, result, { properties: data.properties, categories }, approval);
+      if (!approval.isCurrent()) return;
+      if (applied.error) setApplyError(applied.error.message);
+      else { setResult(null); setCommand(""); refresh(); }
+    } finally { approval.release(); if (approval.isCurrent()) setBusy(false); }
   }
 
   return (
@@ -1631,7 +1672,8 @@ function AgentView({ data, user, refresh }: CrudProps) {
           <div className="result-box">
             <strong>{result.action_type}</strong>
             <pre>{JSON.stringify(result.data, null, 2)}</pre>
-            <button className="primary" onClick={applyResult}>Übernehmen</button>
+            <button className="primary" onClick={applyResult} disabled={busy}>Übernehmen</button>
+            {applyError && <p className="alert error" role="alert">{applyError}</p>}
           </div>
         )}
       </div>
@@ -1647,7 +1689,6 @@ function ProfileView({ data, user, refresh }: CrudProps) {
     await supabase.from("profiles").upsert({
       id: user.id,
       display_name: textValue(form.get("display_name")),
-      avatar_url: data.profile?.avatar_url ?? null,
     });
     refresh();
   }
@@ -1727,7 +1768,7 @@ function TransactionTable({
               <td>
                 <div className="mini-actions">
                   {showDownloads && tx.receipt_url ? <button onClick={() => openReceipt(tx, signedReceiptUrls[tx.id])}>Öffnen</button> : null}
-                  <button onClick={() => remove("transactions", tx.id, refresh)}>Löschen</button>
+                  <button onClick={() => remove("transactions", tx.id, refresh, Boolean(tx.receipt_url))}>Löschen</button>
                 </div>
               </td>
             </tr>
@@ -1835,7 +1876,8 @@ function AiConsent({ onAccept }: { onAccept: () => void }) {
   );
 }
 
-async function remove(table: string, id: string, refresh: () => void) {
+async function remove(table: string, id: string, refresh: () => void, hasFiles = false) {
+  if (hasFiles && fileMutationBlocked(alert)) return;
   if (!window.confirm("Wirklich löschen?")) return;
   const { error } = await supabase.from(table).delete().eq("id", id);
   if (error) alert(error.message);
@@ -1843,11 +1885,13 @@ async function remove(table: string, id: string, refresh: () => void) {
 }
 
 async function removeDocument(doc: DocumentRow, refresh: () => void) {
+  if (fileMutationBlocked(alert)) return;
   if (!window.confirm("Dokument löschen?")) return;
-  const path = storagePathFromUrl("documents", doc.file_url);
-  if (path) await supabase.storage.from("documents").remove([path]);
-  await supabase.from("documents").delete().eq("id", doc.id);
-  refresh();
+  try {
+    const path = storagePathFromUrl("documents", doc.file_url);
+    await deleteDocumentSafely({ path, removeFile: target => supabase.storage.from("documents").remove([target]), removeReference: async () => await supabase.from("documents").delete().eq("id", doc.id) });
+    refresh();
+  } catch (error) { alert(error instanceof Error ? error.message : "Das Dokument konnte nicht gelöscht werden. Seine Zuordnung bleibt erhalten."); }
 }
 
 async function openSigned(bucket: string, url: string) {

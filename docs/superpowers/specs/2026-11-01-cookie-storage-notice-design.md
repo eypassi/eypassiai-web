@@ -1,0 +1,31 @@
+# Cookies und Browserspeicher auf eypassiai.com
+
+Status: Nach unabhängiger technischer Prüfung vom Nutzer am 01.11.2026 ausdrücklich zur Umsetzung und Veröffentlichung freigegeben; Umsetzung noch ausstehend.
+
+## Zweck und geprüfter Ausgangspunkt
+
+Pascal möchte im Rahmen der laufenden Datenschutzarbeiten einen sichtbaren Cookie-Hinweis auf der bestehenden Website. Die Quellprüfung vom 01.11.2026 fand keine Analyse-/Werbeskripte, externen Schriftarten oder eingebetteten Fremdseiten. Supabase speichert die Web-Anmeldung in localStorage. Die ausdrücklich erteilte KI-Freigabe liegt separat und kontogebunden in localStorage. Beide Funktionen werden bisher durch denselben JavaScript-Einstieg auch auf der öffentlichen Startseite initialisiert. Eine anonyme HEAD-Anfrage auf / enthielt kein Set-Cookie; das ist kein universeller Nachweis für jeden Hosting-Abruf.
+
+## Vorgeschlagene Umsetzung
+
+1. Startseite, /app/ und die vier Rechtsseiten erhalten denselben kleinen Hinweis „Cookies & Browserspeicher“ im bestehenden dunklen Grün. Er blockiert die Nutzung nicht. „Verstanden“ blendet den Hinweis aus; „Details“ öffnet die Speicherinformationen. Es gibt keine erfundenen Einwilligungen oder vorausgewählten Tracking-Kategorien.
+2. Ein ständig erreichbarer, eindeutig benannter Link öffnet die Informationen erneut. Die Rechtsseiten behalten einen funktionierenden Link auf den Speicherabschnitt der Datenschutzerklärung, auch ohne JavaScript. Der Hinweis und seine Details haben klar beschriftete Schaltflächen, sichtbaren Tastaturfokus und eine auf kleinen Bildschirmen begrenzte, scrollbar bleibende Höhe. Ein modaler Detaildialog erhält Escape, Fokusbegrenzung und Rückgabe des Fokus.
+3. Nur nach „Verstanden“ wird eine versionierte Ausblendepräferenz ohne Nutzerkennung lokal gespeichert. Sie ist höchstens 180 Tage gültig; beim nächsten Aufruf wird ein abgelaufener Eintrag nicht mehr berücksichtigt und seine Entfernung versucht. Bei geschlossenem Browser findet keine automatische Löschung statt. Die Angabe beschreibt eine Ausblendepräferenz, keine Datenschutz-/KI-Einwilligung. Gesperrter Browserspeicher verhindert weder Website-Nutzung noch das Schließen für den aktuellen Seitenaufruf. Kein weiteres Netzwerkziel wird eingebunden.
+4. Die Details benennen getrennt: Login-Sitzung bei Supabase, gesonderte KI-Freigabe und die neue Hinweispräferenz. Die tatsächlichen Zwecke, Schlüsseltypen und Aufbewahrungsgrenzen werden erklärt. Login bleibt bis zur Abmeldung bzw. Entfernung/Invalidierung der Sitzung bestehen; keine erfundene feste Lebensdauer. Die KI-Freigabe bleibt bis Widerruf, bekanntem Kontowechsel/Abmeldung, Entfernung oder Versionswechsel gültig. Der Hinweis erteilt oder widerruft keine KI-Freigabe; die Bedienung bleibt im bestehenden KI-Bereich.
+5. Öffentliche Startseite und Web-App werden auf Modulebene getrennt. Der Supabase-Client und die KI-Freigabe werden erst beim Laden von /app/ initialisiert. Ein gewöhnlicher Besuch der Startseite oder Rechtsseiten löst damit weder eine Wiederherstellung/Erneuerung der Web-Anmeldung noch einen Zugriff auf deren Speichereinträge aus. Bestehende Anmelde-Rückleitungen auf / oder /index.html werden berücksichtigt: Erkennbare Auth-Callback-Parameter führen ausschließlich anhand der URL nach /app/, wobei Query und Fragment unverändert erhalten bleiben. Weder deren Werte noch Token werden protokolliert oder angezeigt. Es wird kein Supabase-Aufruf benötigt, um die Weiterleitung zu erkennen. Die Weiterleitung gilt nur für Auth-Callbacks, nicht für gewöhnliche Startseitenbesuche. Die tatsächliche Provider-Konfiguration wurde nicht geprüft; zukünftige Registrierung/Rücksetzung nutzt ausdrücklich /app/. Bestehende Konten und ihre Anmeldedaten werden nicht geändert.
+6. Abschnitt 2 der Datenschutzerklärung wird an die tatsächliche Umsetzung angepasst. Es wird keine allgemeine Rechtskonformität, völlige Datenfreiheit oder Einwilligung in Dienstleisterverarbeitung aus „Verstanden“ abgeleitet. Keine Tracker werden ergänzt. /knie bleibt als eigenständige Seite unverändert.
+
+## Alternativen
+
+- Nur ein gut sichtbarer Informationslink: weniger Unterbrechung; erfüllt den Wunsch nach einem beim ersten Aufruf sichtbaren Hinweis nur teilweise.
+- Vollständiger Consent-Manager: sinnvoll, wenn tatsächlich optionale Tracker hinzukommen. Aktuell unnötige Kategorien und zusätzliche Komplexität ohne tatsächlichen Einwilligungsgegenstand.
+
+## Umsetzung und Prüfung nach Freigabe
+
+Kleine getrennte Module für Hinweiszustand und zugängliche Oberfläche; gemeinsame Einbindung in die HTML-Einstiege. Landing und AppRuntime werden ohne fachliche Funktionsänderung getrennt. Tests müssen beweisen, dass Bestätigung keine Auth-/KI-Freigabe schreibt, Ablaufgrenze/unbekannte Version/ungültige oder zukünftige Zeitstempel nicht gelten und Speicherausfall einschließlich fehlgeschlagener Entfernung vertragen wird. Normale öffentliche Seiten dürfen keinen Auth-Code initialisieren. Synthetische Auth-Callbacks müssen Query und Fragment unverändert nach /app/ weiterreichen; Bestätigung, Wiederherstellung und Fehler-Rückleitung sind abzudecken, ohne echte Auth-Daten zu verwenden. Bestehende KI-Tests, Typecheck, Build und Pages-Prüfung bleiben verpflichtend. Im Browser werden Erstaufruf, Details, Schließen, Wiederöffnen, Tastaturbedienung sowie schmale Darstellung geprüft. Veröffentlichung erst nach erfolgreicher Prüfung, anschließend die öffentlichen Seiten und das ausgelieferte Paket kontrollieren.
+
+## Grenzen
+
+Der Hinweis ersetzt keine Vorfallbewertung/Meldeentscheidung, Sicherheits- und Wiederherstellungsprüfung, vollständigen Löschprozess, wirksamen AVV, Anbieter-/Transfernachweise, Apple-Erklärungen, Gewerbeanzeige oder steuerliche Erfassung. Es werden weder Backend-Schutzmaßnahmen geändert noch Kundendaten gelesen oder amtliche Erklärungen eingereicht.
+
+Rechtlicher Bezug: § 25 TDDDG betrifft auch vergleichbare Browserspeicher. Die Ausnahme für erforderliche Speicherung setzt den ausdrücklich angeforderten Dienst voraus; sie ist keine pauschale Erlaubnis für beliebige dauerhafte Speicherung. Quellen: https://www.gesetze-im-internet.de/ttdsg/__25.html und https://www.datenschutz.rlp.de/themen/cookies-und-einwilligungsbanner.

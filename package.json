@@ -8,7 +8,7 @@
     "dev:domain": "vite --host 0.0.0.0 --port 5173",
     "build": "tsc -b && vite build && node scripts/prepare-pages.mjs",
     "check:pages": "node scripts/verify-pages.mjs",
-    "test": "node --test src/ai-consent.test.mjs src/ai-context.test.mjs src/ai-invoke.test.mjs",
+    "test": "node --test src/ai-consent.test.mjs src/ai-context.test.mjs src/ai-invoke.test.mjs src/auth-callback-route.test.mjs src/storage-notice-state.test.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "local-domain:on": "bash scripts/enable-local-domain.sh",
     "local-domain:off": "bash scripts/disable-local-domain.sh"

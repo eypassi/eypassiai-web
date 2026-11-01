@@ -12,6 +12,7 @@ export default defineConfig({
     allowedHosts: ["eypassiai.com", "www.eypassiai.com", "app.eypassiai.com"],
   },
   build: {
+    manifest: true,
     rollupOptions: {
       input: {
         main: "index.html",

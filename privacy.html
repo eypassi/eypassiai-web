@@ -90,6 +90,7 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.9em;
+            overflow-wrap: anywhere;
         }
         hr {
             border: none;
@@ -102,17 +103,25 @@
 <nav aria-label="Rechtliche Informationen"><a href="/">Startseite</a> · <a href="/impressum.html">Impressum</a> · <a href="/terms.html">AGB</a> · <a href="/avv.html">Auftragsverarbeitung</a></nav>
 <main>
 <h1>Datenschutzerklärung</h1>
-<p class="meta">Stand: 30. Oktober 2026 · Version 2026-10-30 · Für die iOS-App eypassiai, die Website eypassiai.com und die Browser-Anwendung</p>
+<p class="meta">Stand: 1. November 2026 · Version 2026-11-01 · Für die iOS-App eypassiai, die Website eypassiai.com und die Browser-Anwendung</p>
 
 <h2>1. Ansprechpartner und Rollen</h2>
 <p>Verantwortlich für die Verarbeitung der Konto-, Vertrags- und Betriebsdaten des Dienstes ist:</p>
 <p><strong>Pascal Weber</strong><br>Babenhäuser Str. 15<br>64859 Eppertshausen<br>Deutschland<br>E-Mail: <a href="mailto:passiweber@icloud.com">passiweber@icloud.com</a></p>
 <p>Wenn Sie als Vermieter personenbezogene Daten von Mietern und anderen Personen im Dienst verwalten, bestimmen Sie grundsätzlich die Zwecke und Rechtsgrundlagen dieser Verarbeitung. Wir verarbeiten diese Inhalte nach Ihren Weisungen als Auftragsverarbeiter, soweit die DSGVO auf Ihre Tätigkeit anwendbar ist. Die hierzu erforderliche Vereinbarung ist gesondert zu schließen; <a href="/avv.html">Informationen und Vertragsentwurf zur Auftragsverarbeitung</a>. Diese Datenschutzerklärung allein schließt keinen solchen Vertrag.</p>
 
-<h2>2. Website, Hosting und Speicherung im Browser</h2>
+<h2 id="browserspeicher">2. Website, Hosting, Cookies und Browserspeicher</h2>
 <p>Website und Browser-Anwendung werden über <strong>GitHub Pages, GitHub, Inc. (USA)</strong> ausgeliefert. Dabei werden insbesondere IP-Adresse und technische Verbindungsdaten verarbeitet. GitHub protokolliert Besucher-IP-Adressen zu Sicherheitszwecken auch ohne GitHub-Konto. Zweck ist die Auslieferung und Absicherung des Angebots; Rechtsgrundlage für unsere Veranlassung dieser Verarbeitung ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem erreichbaren, sicheren Internetangebot). Einzelheiten: <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection">GitHub Pages und Datenerhebung</a>, <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub-Datenschutzerklärung</a>.</p>
-<p>Für die von Ihnen angeforderte Anmeldung speichert die Browser-Anwendung Sitzungsdaten und Authentifizierungstoken lokal im Browser. Dadurch bleibt die Anmeldung bei weiteren Aufrufen erhalten; Token werden zur Prüfung und Erneuerung der Sitzung an Supabase gesendet. Zudem wird die KI-Freigabe im Browser dem jeweiligen Konto zugeordnet und mit Versionskennung und Zeitpunkt lokal gespeichert. Die einmalige Freigabe gilt für die im Dialog gemeinsam beschriebenen KI-Funktionen; sie wird nicht für jede Funktion getrennt gespeichert. Diese Speicherungen dienen der Anmeldung und der von Ihnen gewählten Funktion, nicht der Werbeverfolgung. Die erforderliche Speicherung beziehungsweise der Zugriff erfolgt auf Grundlage von § 25 Abs. 2 Nr. 2 TDDDG; die anschließende Verarbeitung der Kontodaten auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, die Verarbeitung aufgrund einer KI-Einwilligung auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO.</p>
-<p>Sie können lokale Daten über die Browser-Einstellungen entfernen; dadurch werden Sie gegebenenfalls abgemeldet und Ihre Einstellungen zurückgesetzt. Ein Entfernen lokaler Daten löscht die Daten im Nutzerkonto nicht. Speichern Sie Zugangsdaten auf gemeinsam genutzten Geräten nur, wenn andere Personen keinen Zugriff darauf erhalten. Wir setzen keine Werbe-Tracker ein. Die kontobezogene Auswertung von Abonnementdaten durch RevenueCat ist in Abschnitt 6 beschrieben.</p>
+<p>Die Website bindet derzeit keine Analyse- oder Werbe-Tracker ein. Die folgenden Funktionen verwenden <strong>localStorage</strong>, einen lokalen Browserspeicher, statt selbst gesetzter HTTP-Cookies. Das Speichern und Auslesen solcher Informationen unterliegt ebenfalls § 25 TDDDG. Für die technisch erforderliche Bereitstellung eines ausdrücklich gewünschten Dienstes gilt § 25 Abs. 2 Nr. 2 TDDDG; daraus folgt keine pauschale Erlaubnis für beliebige dauerhafte Speicherung.</p>
+<dl>
+<dt><strong>Anmeldung in der Web-App</strong></dt>
+<dd>Beim Öffnen von <code>/app/</code> wird Supabase Auth geladen. Unter <code>sb-krrhegbikgusqubxcxbr-auth-token</code> werden Sitzungs- und Authentifizierungsinformationen einschließlich Kontoangaben gespeichert und zur Prüfung und Erneuerung der Sitzung an Supabase gesendet. Die Speicherung ermöglicht auch eine Anmeldung bei späteren Aufrufen. Es gibt keine feste lokale Löschfrist; der Eintrag wird bei erfolgreicher Abmeldung entfernt und kann außerdem durch Browserbereinigung oder Sitzungsinvalidierung seine Nutzbarkeit verlieren. Das SDK prüft außerdem kurzzeitig die Verfügbarkeit des lokalen Speichers. Die Verarbeitung zur Anmeldung und Kontobereitstellung beruht auf Art. 6 Abs. 1 lit. b DSGVO. Ein gewöhnlicher Besuch der Startseite oder Rechtsseiten lädt den Anmeldedienst nicht. Bestehende E-Mail-Rückleitungen mit Anmeldeparametern werden zur Web-App weitergeleitet.</dd>
+<dt><strong>Gesonderte KI-Freigabe</strong></dt>
+<dd>Nur nach ausdrücklicher Freigabe wird unter <code>eypassiai.aiConsent.account.&lt;Kontokennung&gt;</code> die Kontokennung mit Freigabeversion und Zeitpunkt gespeichert. Die Freigabe gilt gemeinsam für die im KI-Dialog beschriebenen Funktionen; sie bleibt bis zu Widerruf, bekanntem Kontowechsel/Abmeldung, Entfernung des Eintrags oder einer Änderung der erforderlichen Freigabeversion gültig. Sie können die Freigabe in der Web-App unter Profil → KI-Datenfreigabe widerrufen. Der lokale Eintrag hält Ihre gewählte Funktionseinstellung fest; die auf der KI-Einwilligung beruhende Datenverarbeitung erfolgt nach Art. 6 Abs. 1 lit. a DSGVO. Die Datenübermittlung und Empfänger werden in Abschnitt 5 erläutert.</dd>
+<dt><strong>Ausblenden des Speicherhinweises</strong></dt>
+<dd>Erst durch „Verstanden“ wird unter <code>eypassiai.storageNotice</code> die Hinweisversion mit Bestätigungszeitpunkt gespeichert, ohne Konto- oder individuelle Trackingkennung. Die Einstellung gilt höchstens 180 Tage, damit der von Ihnen geschlossene Hinweis nicht bei jedem Seitenaufruf erneut erscheint. Beim nächsten Besuch wird ein abgelaufener oder ungültiger Eintrag nicht mehr berücksichtigt und seine Entfernung versucht. Bei geschlossenem Browser findet keine zeitgesteuerte Löschung statt. Diese Speicherung dient allein der ausdrücklich gewählten Darstellungseinstellung (§ 25 Abs. 2 Nr. 2 TDDDG). „Verstanden“ ist keine Einwilligung in Analyse, Werbung, KI-Verarbeitung oder andere Dienste. Die Informationen bleiben über „Cookies &amp; Browserspeicher“ jederzeit erreichbar. Bei gesperrtem Browserspeicher lässt sich der Hinweis für den aktuellen Aufruf schließen.</dd>
+</dl>
+<p>Sie können lokale Daten über die Browser-Einstellungen entfernen; dadurch werden Sie gegebenenfalls abgemeldet und Ihre lokalen Freigaben und Einstellungen zurückgesetzt. Ein Entfernen lokaler Daten löscht keine Konto- oder Dokumentdaten auf unseren Servern und kündigt kein Apple-Abonnement. Verwenden Sie eine dauerhaft angemeldete Sitzung auf gemeinsam genutzten Geräten nur, wenn andere Personen keinen Zugriff darauf erhalten, und melden Sie sich nach der Nutzung ab. Die kontobezogene Auswertung von Abonnementdaten durch RevenueCat ist in Abschnitt 6 beschrieben.</p>
 
 <h2>3. Nutzerkonto, Vertragsverwaltung und Support</h2>
 <ul>
@@ -166,6 +175,7 @@
 <p>Bei Änderungen der Verarbeitung aktualisieren wir diese Erklärung und informieren Sie, soweit erforderlich, zusätzlich. Eine Veröffentlichung ersetzt keine notwendige Einwilligung, Vertragsvereinbarung oder technische Sicherheitsmaßnahme. Der Dienst richtet sich an volljährige Nutzer.</p>
 </main>
 <hr>
-<footer><p class="meta">© 2026 eypassiai · Pascal Weber · <a href="/impressum.html">Impressum</a> · <a href="/terms.html">AGB</a> · <a href="/avv.html">Auftragsverarbeitung</a></p></footer>
+<footer><p class="meta">© 2026 eypassiai · Pascal Weber · <a href="/impressum.html">Impressum</a> · <a href="/terms.html">AGB</a> · <a href="/avv.html">Auftragsverarbeitung</a></p><p><a href="/privacy.html#browserspeicher" data-storage-details>Cookies &amp; Browserspeicher</a></p></footer>
+    <script type="module" src="/src/storage-notice.ts"></script>
 </body>
 </html>
